@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<!-- Required meta tags -->
+<meta charset="UTF-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<!-- jquery -->
+<script th:src="@{/jquery/3.6.0/jquery.min.js}"></script>
+
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" type="text/css"
+	th:href="@{/bootstrap/5.1.0/css/bootstrap.min.css}">
+
+<!-- Bootstrap JS -->
+<script th:src="@{/bootstrap/5.1.0/js/bootstrap.min.js}"></script>
+
+<!-- templates_style CSS -->
+<link rel="stylesheet" type="text/css"
+	th:href="@{/css/signup_style.css}">
+<link rel="stylesheet" type="text/css" th:href="@{/css/index_style.css}">
+<link rel="stylesheet" type="text/css"
+	th:href="@{/css/login_form_style.css}">
+
+<!-- templates_script JS -->
+<script th:src="@{/js/signup_script.js}" charset="UTF-8"></script>
+<script th:src="@{/js/recipe_script.js}" charset="UTF-8"></script>
+
+<!-- 1단계 : daum 우편번호 서비스 외장 JS(Javascript) 파일 링크 -->
+<script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
+
+<title>오늘은 내가 요리사</title>
+</head>
+
+<body>
+	<!-- 검색 -->
+	<div class="row justify-content-center"
+		style="height: 100px; margin-top: 50px">
+		<div class="d-flex align-items-center col-5">
+			<div class="input-group">
+				<input type="text" id="search_kw" class="form-control"
+					th:value="${kw}" placeholder="원하는 재료를 입력하세요.">
+				<button class="btn btn-warning" type="button" id="btn_search">찾기</button>
+			</div>
+		</div>
+
+		<!-- 레시피 등록하기 버튼 -->
+		<div class="row justify-content-end">
+			<div class="gap-2 d-md-block">
+				<a class="btn btn-warning float-end" type="button"
+					th:href="@{/recipe/create}">레시피 등록하기</a>
+			</div>
+		</div>
+	</div>
+
+	<!-- 네비게이션바 -->
+	<nav th:replace="~{navbar :: navbarFragment}"></nav>
+
+	<!-- 기본 템플릿 안에 삽입될 내용 Start -->
+	<th:block layout:fragment="content"></th:block>
+	<!-- 기본 템플릿 안에 삽입될 내용 End -->
+
+</body>
+<div>
+	<!-- input 찾기 엔터키 -->
+	<script>
+		var input = document.getElementById("search_kw");
+		input.addEventListener("keyup", function(event) {
+			if (event.keyCode === 13) {
+				event.preventDefault();
+				document.getElementById("btn_search").click();
+			}
+		});
+	</script>
+</div>
+
+</html>
