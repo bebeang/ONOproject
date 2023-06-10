@@ -19,7 +19,7 @@
             <tr class="text-center">
                <th>번호</th>
                <th>요리사진</th>
-               <th style="width:40%">제목</th>
+               <th style="width:50%">제목</th>
                  <th>글쓴이</th>
                <th>작성일시</th>
                <th>추천수</th>
@@ -27,13 +27,13 @@
             </tr>
          </thead>
          
-         <tbody class="text-center" style="vertical-align: middle;">
+         <tbody class="text-center">
             <tr th:each="recipe, loop : ${paging}">
                <td th:text="${paging.getTotalElements - (paging.number * paging.size) - loop.index}"></td>
                
                <td> 
                 <a th:href="@{|/recipe/detail/${recipe.id}|}" >
-               <img th:src="${recipe.filePath}" style="width: 250px; height: 250px;" alt="Thumbnail"></a>
+               <img th:src="${recipe.filePath}" style="width: 200px; height: 200px;" alt="Thumbnail"></a>
                </td>
                
                
