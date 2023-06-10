@@ -1,11 +1,24 @@
 <html layout:decorate="~{layout}">
 <div layout:fragment="content" class="container my-3">
+
+<style>
+	a { 
+		text-decoration:none
+	   }
+	a:visited {
+	  color : black;
+	}
+	a:hover {
+	  color : #FFC107;
+	}
+</style>
    
     <!-- Recipe List -->
-      <table class="table">
-         <thead class="table-dark">
+      <table class="table table-bordered">
+         <thead class="table table-bordered">
             <tr class="text-center">
                <th>번호</th>
+               <th>요리사진</th>
                <th style="width:50%">제목</th>
                  <th>글쓴이</th>
                <th>작성일시</th>
@@ -14,10 +27,17 @@
             </tr>
          </thead>
          
-         <tbody>
-            <tr class="text-center" th:each="recipe, loop : ${paging}">
-                <td th:text="${paging.getTotalElements - (paging.number * paging.size) - loop.index}"></td>
-               <td class="text-center">
+         <tbody class="text-center">
+            <tr th:each="recipe, loop : ${paging}">
+               <td th:text="${paging.getTotalElements - (paging.number * paging.size) - loop.index}"></td>
+               
+               <td> 
+                <a th:href="@{|/recipe/detail/${recipe.id}|}" >
+               <img th:src="${recipe.filePath}" style="width: 200px; height: 200px;" alt="Thumbnail"></a>
+               </td>
+               
+               
+               <td>
                   <a th:href="@{|/recipe/detail/${recipe.id}|}" th:text="${recipe.subject}"></a>
                   <span class="text-danger small ms-2"
                         th:if="${#lists.size(recipe.answerList) > 0}" 
