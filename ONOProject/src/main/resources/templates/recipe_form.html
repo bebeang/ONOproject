@@ -1,0 +1,268 @@
+<html layout:decorate="~{layout}">
+<div layout:fragment="content" class="container">
+
+   <!-- 질문등록 -->
+   <h5 class="my-5 border-bottom pb-2">레시피 등록</h5>
+   
+   <form th:object="${recipeForm}" method="post"
+      enctype="multipart/form-data">
+      <input type="hidden" th:name="${_csrf.parameterName}"
+         th:value="${_csrf.token}" />
+      <div th:replace="form_errors :: formErrorsFragment"></div>
+
+      <!-- 레시피 등록 -->
+      <table class="table table-borderless" style="margin: 20px 0px 0px 0px;">
+
+         <tbody>
+
+            <!-- 레시피 제목(subject) -->
+            <tr>
+               <td></td>
+               <td><label for="subject" class="form-label">레시피 제목</label></td>
+               <td><input type="text" th:field="*{subject}" class="form-control"></td>
+                  
+            <!-- 사진 첨부 -->      
+               <td rowspan='3'><label for="file" class="for-label">사진</label>
+                  <input type="file" name="file" th:field="*{file}"onchange="setThumbnail(event);"/>
+                       <div id="image_container"></div>
+                    </td>
+            </tr>
+
+            <!-- 요리소개(cookIntro) -->
+            <tr>
+               <td></td>
+               <td><label for="cookIntro" class="form-label">요리소개</label></td>
+               <td><textarea type="text" th:field="*{cookIntro}"
+                     class="form-control"></textarea></td>
+            </tr>
+
+            <!-- 카테고리(category) -->
+            <tr>
+                <td></td>
+               <td><label for="category" class="form-label">카테고리</label></td>
+               <td><div style="display: inline-block;">
+                     <select class="form-select" aria-label="Default select example" th:field="*{category}">
+                        <option value="">종류별</option>
+                        <option value="밥요리">밥요리</option>
+                        <option value="국/탕">국/탕</option>
+                        <option value="찌개/전골">찌개/전골</option>
+                        <option value="밑반찬">밑반찬</option>
+                        <option value="김치장아찌">김치장아찌</option>
+                        <option value="면요리">면요리</option>
+                        <option value="샐러드">샐러드</option>
+                        <option value="간식/분식">간식/분식</option>
+                        <option value="베이킹">베이킹</option>
+                        <option value="디저트">디저트</option>
+                        <option value="기타">기타</option>
+                     </select>
+                  </div>
+
+                  <div style="display: inline-block;">
+                     <select class="form-select" aria-label="Default select example" th:field="*{category}">
+                        <option value="">상황별</option>
+                        <option value="손님상">손님상</option>
+                        <option value="아이반찬">아이반찬</option>
+                        <option value="도시락">도시락</option>
+                        <option value="야식/술안주">야식/술안주</option>
+                        <option value="명절요리">명절요리</option>
+                        <option value="기타">기타</option>
+                     </select>
+                  </div>
+
+                  <div style="display: inline-block;">
+                     <select class="form-select" aria-label="Default select example" th:field="*{category}">
+                        <option value="">방법별</option>
+                        <option value="볶음요리">볶음요리</option>
+                        <option value="구이(고기/생선)">구이(고기/생선)</option>
+                        <option value="찜/조림">찜/조림</option>
+                        <option value="튀김">튀김</option>
+                        <option value="기타">기타</option>
+                     </select>
+                  </div></td>
+            </tr>
+
+            <!-- 요리정보(cookInfo) -->
+            <tr>
+                <td></td>
+               <td><label for="cookInfo" class="form-label">요리정보</label></td>
+               <td><label id="people-select">인원</label>
+                  <div style="display: inline-block; margin-right: 30px;">
+                     <select class="form-select" aria-label="Default select example" th:field="*{cookInfo_people}">
+                        <option value="">인원</option>
+                        <option value="1인">1인</option>
+                        <option value="2인">2인</option>
+                        <option value="3인">3인</option>
+                        <option value="4인">4인</option>
+                        <option value="5인">5인</option>
+                        <option value="6인이상">6인이상</option>
+                     </select>
+                  </div> 
+                  
+                  <label id="time-select">시간</label>
+                  <div style="display: inline-block; margin-right: 30px;">
+                     <select class="form-select" aria-label="Default select example" th:field="*{cookInfo_time}">
+                        <option value="">시간</option>
+                        <option value="5분이내">5분이내</option>
+                        <option value="10분이내">10분이내</option>
+                        <option value="15분이내">15분이내</option>
+                        <option value="20분이내">20분이내</option>
+                        <option value="30분이내">30분이내</option>
+                        <option value="60분이내">60분이내</option>
+                        <option value="90분이내">90분이내</option>
+                        <option value="2시간이내">2시간이내</option>
+                        <option value="2시간이상">2시간이상</option>
+                     </select>
+                  </div> 
+                  
+                  <label id="level-select">난이도</label>
+                  <div style="display: inline-block; margin-right: 30px;">
+                     <select class="form-select" aria-label="Default select example" th:field="*{cookInfo_level}">
+                        <option value="">난이도</option>
+                        <option value="아무나">아무나</option>
+                        <option value="초급">초급</option>
+                        <option value="중급">중급</option>
+                        <option value="고급">고급</option>
+                        <option value="신의경지">신의경지</option>
+                     </select>
+                  </div></td>
+                  <td></td>
+            </tr>
+         </tbody>
+      </table> 
+      <!-- 윗부분 끝 -->
+      
+      <hr style="border:solid 5px gray;">
+      
+       <!-- 재료(ingredient) / 용량(capacity) -->
+       
+       <div class="mb-3" >
+           <div class="form-label" style="margin-left:30px">
+               <label for="content_name" class="form-label">요리재료</label>
+               <div style="color:gray">&ensp;재료가 남거나 부족하지 않도록 정확한 계량정보를 적어주세요.<br></div>
+          </div>
+          
+           <div class="form-label" id="ingredient" style="margin-left: 150px">
+              <input type="text" name="ingredient" th:field="*{ingredient}" placeholder="예) 돼지고기" style="width: 400px; margin-bottom: 10px">
+              <input type="text" name="capacity" th:field="*{capacity}" placeholder="예) 300g" style="width: 400px; margin-bottom: 10px">
+              <input type="button" value="추가" class="btn btn-outline-warning btn-sm" onclick="add_ingredientbox()">
+          </div>
+        </div>   
+           
+       <hr style="border:solid 5px gray;"> 
+       
+       <!-- 요리순서(content) -->
+        <div class="mb-3" style="margin-left:30px">
+            <label for="content_name" class="form-label">요리순서</label>
+            <div style="color:gray; margin-left:10px">요리의 맛이 좌우 될 수 있는 중요한 부분은 빠짐없이 적어주세요.<br></div>
+            <div style="color:gray; margin-left:10px">예) 10분간 익혀주세요. ▷ 10분간 약한불로 익혀주세요.<br></div>
+            <div style="color:gray; margin-left:37px">마늘편은 익혀주세요. ▷ 마늘편을 충분히 익혀주셔야 매운 맛이 사라집니다.<br></div>
+            <div style="color:gray; margin-left:37px">꿀을 조금 넣어주세요. ▷ 꿀이 없는 경우, 설탕 1스푼으로 대체 가능 합니다.</div>
+        </div>
+                
+       <table style="margin-left:150px">
+          <tbody id="content">
+              <tr class="form-label">
+                  <td><label for="step" class="form-label" style="margin-right:10px">STEP1</label></td>
+                  <td><input type="text" name="content" th:field="*{content}" style="width:350px; height:200px; margin-bottom:40px"></td>
+                  <td class="image-container">
+                      <img style="width:200px;" id="preview-image" src="https://dummyimage.com/200X200/ffffff/000000.gif&text=preview-image">
+                      <input style="display: block;" type="file" th:field="*{contentFile}" id="input-image" onchange="readImage(this)">
+                  </td>
+                  <td><input type="button" value="추가" class="btn btn-outline-warning btn-sm" onclick="add_contentbox()"></td>
+              </tr>
+          </tbody>
+      </table>
+        
+        <hr style="border:solid 5px gray;"> 
+        
+        <!-- 버튼 -->
+        <div class="d-flex justify-content-center">
+           <input type="submit" value="저장하기" class="btn btn-warning my-2 btn-lg">
+      </div>
+      
+   </form>
+
+   <script>
+       // 썸네일 미리보기
+      function setThumbnail(event) {
+         var reader = new FileReader();
+
+         reader.onload = function(event) {
+            var img = document.createElement("img");
+            img.setAttribute("src", event.target.result);
+            img.style.width = "300px"; // 이미지 너비를 300px로 조정
+            img.style.height = "200px"; // 이미지 높이를 200px로 조정
+            document.querySelector("div#image_container").appendChild(img);
+         };
+
+         reader.readAsDataURL(event.target.files[0]);
+      }
+      
+      // input box(ingredient)
+      const add_ingredientbox = () => {
+        const box = document.getElementById("ingredient");
+        const newP = document.createElement('p');
+        newP.innerHTML = `<input type='text' name='ingredient' style='width: 400px'> 
+                          <input type='text' name='capacity' style='width: 400px'> 
+                          <input type='button' value='삭제' class='btn btn-outline-warning btn-sm' onclick='removeIngredient(this)'>`;
+        box.appendChild(newP);
+       }
+       
+       const removeIngredient = (obj) => {
+           document.getElementById('ingredient').removeChild(obj.parentNode);
+       }   
+           
+        // input box(content)
+      let rowCount = 1;
+      
+        // 추가
+      const add_contentbox = () => {
+          const table = document.getElementById("content");
+          const newRow = document.createElement('tr');
+          newRow.innerHTML = `
+              <td><label for="step${rowCount}" class="form-label" style="margin-right:10px">STEP${rowCount}</label></td>
+              <td><input type="text" name="content" th:field="*{content}" style="width:350px; height:200px; margin-bottom:40px"></td>
+              <td class="image-container">
+                  <img style="width:200px;" id="preview-image-${rowCount}" src="https://dummyimage.com/200X200/ffffff/000000.gif&text=preview-image">
+                  <input style="display: block;" type="file" id="input-image-${rowCount}" onchange="readImage(this)">
+              </td>
+              <td><input type="button" value="삭제" class="btn btn-outline-warning btn-sm" onclick="removeContent(this)"></td>
+          `;
+          table.appendChild(newRow);
+          updateStepNumbers();
+          rowCount++;
+      }
+      
+      // 삭제
+      const removeContent = (obj) => {
+          const row = obj.parentNode.parentNode;
+          row.parentNode.removeChild(row);
+          updateStepNumbers();
+      }
+      
+      // label count
+      const updateStepNumbers = () => {
+          const rows = document.getElementById('content').getElementsByTagName('tr');
+          for (let i = 0; i < rows.length; i++) {
+              const label = rows[i].querySelector('label');
+              label.innerText = `STEP${i + 1}`;
+          }
+      }
+      
+      // 미리보기 이미지
+      function readImage(input) {
+          const previewImage = input.parentNode.querySelector('img');
+          if (input.files && input.files[0]) {
+              const reader = new FileReader();
+              reader.onload = e => {
+                  previewImage.src = e.target.result;
+              };
+              reader.readAsDataURL(input.files[0]);
+          } else {
+              previewImage.src = "https://dummyimage.com/200X200/ffffff/000000.gif&text=preview-image";
+          }
+      }
+        
+   </script>
+</div>
+</html>

@@ -1,0 +1,162 @@
+<html layout:decorate="~{layout}">
+<div layout:fragment="content" class="container my-3">
+
+<style>
+	.table {
+		width: 100%;
+	}
+</style>
+
+	<table class="table table-bordered" style="margin-top: 50px">
+			<tr align=center>
+				<td><a href="/section?kw=밥요리"><img src="/image/rice.jpg"
+						alt="rice" style="width: 50px; height: 50px">
+						<p>밥요리</p>
+				</a></td>
+				<td><a href="/section?kw=국/탕"><img src="/image/soup.jpg"
+						alt="soup" style="width: 50px; height: 50px">
+						<p>국/탕</a></td>
+				<td><a href="/section?kw=찌개/전골"><img
+						src="/image/jungol.jpg" alt="jungol"
+						style="width: 50px; height: 50px">
+						<p>찌개/전골</a></td>
+				<td><a href="/section?kw=밑반찬"><img src="/image/banchan.jpg"
+						alt="banchan" style="width: 50px; height: 50px">
+						<p>밑반찬</a></td>
+				<td><a href="/section?kw=김치장아찌"><img
+						src="/image/kimchi.jpg" alt="kimchi"
+						style="width: 50px; height: 50px">
+						<p>김치장아찌</a></td>
+				<td><a href="/section?kw=면요리"><img src="/image/noodle.jpg"
+						alt="noodle" style="width: 50px; height: 50px">
+						<p>면요리</a></td>
+				<td><a href="/section?kw=샐러드"><img src="/image/salad.jpg"
+						alt="salad" style="width: 50px; height: 50px">
+						<p>샐러드</a></td>
+				<td><a href="/section?kw=간식/분식"><img
+						src="/image/tteokbokki.jpg" alt="tteokbokki"
+						style="width: 50px; height: 50px">
+						<p>간식/분식</a></td>
+				<td><a href="/section?kw=베이킹"><img src="/image/baking.jpg"
+						alt="baking" style="width: 50px; height: 50px">
+						<p>베이킹</a></td>
+				<td><a href="/section?kw=디저트"><img src="/image/dessert.jpg"
+						alt="dessert" style="width: 50px; height: 50px">
+						<p>디저트</a></td>
+			</tr>
+
+			<tr align=center>
+				<td><a href="/section?kw=손님상"><img src="/image/party.jpg"
+						alt="party" style="width: 50px; height: 50px">
+						<p>손님상</a></td>
+				<td><a href="/section?kw=아이반찬"><img src="/image/baby.jpg"
+						alt="baby" style="width: 50px; height: 50px">
+						<p>아이반찬</a></td>
+				<td><a href="/section?kw=도시락"><img src="/image/lunch.jpg"
+						alt="lunch" style="width: 50px; height: 50px">
+						<p>도시락</a></td>
+				<td><a href="/section?kw=술안주"><img src="/image/beer.jpg"
+						alt="beer" style="width: 50px; height: 50px">
+						<p>술안주</a></td>
+				<td><a href="/section?kw=명절요리"><img
+						src="/image/holiday.jpg" alt="holiday"
+						style="width: 50px; height: 50px">
+						<p>명절요리</a></td>
+				<td><a href="/section?kw=볶음요리"><img src="/image/plat.jpg"
+						alt="plat" style="width: 50px; height: 50px">
+						<p>볶음요리</a></td>
+				<td><a href="/section?kw=구이"><img src="/image/meat.jpg"
+						alt="meat" style="width: 50px; height: 50px">
+						<p>구이</a></td>
+				<td><a href="/section?kw=찜/조림"><img src="/image/steam.jpg"
+						alt="steam" style="width: 50px; height: 50px">
+						<p>찜/조림</a></td>
+				<td><a href="/section?kw=튀김"><img src="/image/fry.jpg"
+						alt="fry" style="width: 50px; height: 50px">
+						<p>튀김</a></td>
+				<td><a href="/section?kw=기타"><img src="/image/etc.jpg"
+						alt="etc" style="width: 50px; height: 50px">
+						<p>기타</a></td>
+			</tr>
+	</table>
+
+	<!-- 전체 레시피 -->
+		<table class="table table-borderless">
+			<tr class="row">
+				<td class="col-md-3 d-flex justify-content-center" th:each="recipe, loop : ${paging3}">
+					<div class="card" style="width: 15rem;">
+						<img th:src="${recipe.filePath}" style="width: 239px; height: 200px;" class="card-img-top"
+							alt="...">
+
+						<div class="card-body">
+							<h5 class="card-title">
+								<img th:src="${siteUsers3.get(loop.index).profilePath}"
+									class="rounded-circle" width="35px" height="35px"> <span
+									th:if="${recipe.author != null}"
+									th:text="${recipe.author.nickname}"></span>
+							</h5>
+
+							<div class="card-text">
+								<a th:href="@{|/recipe/detail/${recipe.id}|}"
+									th:text="${recipe.subject}"></a>
+							</div>
+
+							추천수 : <span th:text="${#sets.size(recipe.voter)}"></span>
+						</div>
+					</div>
+				</td>
+			</tr>
+		</table>
+
+		<!-- 페이징처리 시작 -->
+		<div th:if="${!paging3.isEmpty()}">
+			<ul class="pagination justify-content-center">
+			
+				<!-- 첫 페이지 -->
+				<li class="page-item" th:classappend="${!paging3.hasPrevious()} ? 'disabled'">
+					<a class="page-link" th:href="@{/section(page=0, kw=${param.kw})}">
+						<span>&laquo;</span>
+				</a></li>
+
+				<!-- 이전 페이지 -->
+				<li class="page-item" th:classappend="${!paging3.hasPrevious()} ? 'disabled'">
+					<a class="page-link" th:href="@{/section(page=${paging3.number - 1}, kw=${param.kw})}">
+						<span>이전</span>
+				</a></li>
+
+				<!-- 페이지 번호 -->
+				<li th:each="page: ${#numbers.sequence(0, paging3.totalPages-1)}" 
+					th:if="${page >= paging3.number-5 and page <= paging3.number+5}"
+					th:classappend="${page == paging3.number} ? 'active'">
+					<a th:text="${page + 1}" class="page-link" href="javascript:void(0)"
+					th:href="@{/section(page=${page}, kw=${param.kw})}"></a></li>
+
+				<!-- 다음 페이지 -->
+				<li class="page-item" th:classappend="${!paging3.hasNext()} ? 'disabled'">
+					<a class="page-link" th:href="@{/section(page=${paging3.number + 1}, kw=${param.kw})}">
+						<span>다음</span>
+				</a></li>
+
+				<!-- 마지막 페이지 -->
+				<li class="page-item" th:classappend="${!paging3.hasNext()} ? 'disabled'">
+					<a class="page-link" 
+					th:href="@{/section(page=${paging3.totalPages - 1}, kw=${param.kw})}">
+						<span>&raquo;</span>
+				</a></li>
+			</ul>
+		</div>
+		<!-- 페이징처리 끝 -->
+
+		<!-- page와 kw를 동시에 get요청 할수 있는 searchform -->
+		<form th:action="@{/recipe/list}" method="get" id="searchForm">
+			<input type="hidden" id="kw" name="kw" th:value="${kw}"> <input
+				type="hidden" id="page" name="page" th:value="${paging3.number}">
+		</form>
+
+	</div>
+
+	<script>
+		
+	</script>
+</div>
+</html>

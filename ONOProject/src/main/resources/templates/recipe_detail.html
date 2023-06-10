@@ -1,0 +1,201 @@
+<html layout:decorate="~{layout}">
+<div layout:fragment="content" class="container my-3">
+
+   <!-- 레시피 제목-->
+   <h2 class="border-bottom py-2" th:text="${recipe.subject}"></h2>
+   
+   <!-- 레시피 -->
+      <div class="card my-3">
+        <div class="card-head" align="center" style="margin-top:50px">
+        
+        <table class="table table-borderless" style="width: 1000px;">
+            
+            <!-- 요리 썸네일 -->
+            <tr>
+             <td rowspan="5" style="width: 600px"><img th:src="${recipe.filePath}" class="img-thumbnail" style="width: 600px; height: 400px;">
+             
+                <!-- 레시피 추천 버튼 -->
+                  <div align="center" style="margin-top:10px" >
+                     <a class="recommend btn btn-sm btn-outline-danger"
+                            th:data-uri="@{|/recipe/vote/${recipe.id}|}">추천
+                            <span class="badge rounded-pill bg-danger" th:text="${#lists.size(recipe.voter)}"></span>
+                     </a>
+                  
+                <!-- 질문 수정 버튼 -->
+                       <a th:href="@{|/recipe/modify/${recipe.id}|}" class="btn btn-sm btn-outline-warning"
+                        sec:authorize="isAuthenticated()" th:if="${recipe.author != null and #authentication.getPrincipal().getUsername() == recipe.author.username}"
+                         th:text="수정"></a>
+                        
+                <!-- 질문 삭제 버튼 -->      
+                     <a th:data-uri="@{|/recipe/delete/${recipe.id}|}" class="delete btn btn-sm btn-outline-warning"
+                        sec:authorize="isAuthenticated()" th:if="${recipe.author != null and #authentication.getPrincipal().getUsername() == recipe.author.username}"
+                        th:text="삭제"></a>
+                </div>
+             </td>
+             
+            <!-- 요리 작성자 -->
+               <td><div class="border-bottom py-2 float-end">
+             <span th:if="${recipe.author != null}" th:text="${recipe.author.nickname}"  style="vertical-align: bottom"></span>
+             <img th:src="${profilePath}" class="rounded" width=80px" height=80px"> 
+                  </div></td>
+            </tr>
+            
+            <!-- 요리제목 -->
+            <tr>
+               <td><h3><span style="margin-left:30px" th:text="${recipe.subject}"></span></h3></td>
+            </tr>
+            
+            <!-- 요리소개 -->
+            <tr>
+               <td><div style="color:gray; margin-left:30px" th:text="${recipe.cookIntro}"></div></td></tr>
+              
+              <!-- 요리 재료 -->
+             <tr>
+             <td>   
+              <h5><span style="margin-left: 30px;">재료 <small class="text-muted">Ingredients</small></span></h5> 
+              <h6><th:block th:each="ingredient, index : ${#strings.arraySplit(recipe.ingredient, ',')}">
+                  <span th:text="${ingredient}" style="margin-left: 30px; text-align: left; display: inline-block; width: 30%;"></span>
+                  <span th:text="' '"></span>
+                  <span th:text="${#strings.arraySplit(recipe.capacity, ',')[__${index.index}__]}" style="text-align: right; display: inline-block; width: 30%;"></span>
+                  <br/></h6>
+              </th:block></td>
+      </tr>
+         </table>  
+            
+            <!-- 최초 작성 일시       
+            <div class="badge bg-light text-dark p-2 text-start">
+               <div th:text="${#temporals.format(recipe.createDate, 'yyyy-MM-dd HH:mm')}"></div>
+            </div> -->
+            
+             <!-- 수정 일시 
+             <div th:if="${recipe.modifyDate != null}" class="badge bg-light text-dark p-2 text-start mx-3">
+                    <div class="mb-2">수정됨</div>
+                    <div th:text="${#temporals.format(recipe.modifyDate, 'yyyy-MM-dd HH:mm')}"></div>
+             </div> -->
+        
+                  
+         <!-- 레시피 내용 -->         
+         <table class="table table-bordered" style="width: 1000px; margin-top:100px;">
+           <tr class="text-center">
+           <!-- 요리 정보(인원/시간/난이도) -->
+             <td><img src="/image/people.jpg" style="width:40px; height:40px;">
+                <div th:text="${recipe.cookInfo_people}"></div></td>
+             <td><img src="/image/time.jpg" style="width:40px; height:40px;">
+                <div th:text="${recipe.cookInfo_time}"></div></td>
+             <td><img src="/image/level.jpg" style="width:40px; height:40px;">
+                <div th:text="${recipe.cookInfo_level}"></div></td>
+            </tr>
+        </table>
+           
+          <!-- 마크다운 적용 -->
+          <!-- 요리 레시피 -->
+      <table class="table" style="width: 1000px;">
+      <h5 class="text-start" style="margin-top:100px; margin-left:150px;">조리순서 <small class="text-muted">Steps</small></h5>
+      
+      <th:block th:each="content, index : ${#strings.arraySplit(recipe.content, ',')}">
+      
+         <tr>
+              <td rowspan='2' style="width: 400px; height: 400px; border-bottom: none;" >
+                 <img th:src="${recipe.contentFilePath}" class="img-thumbnail" style="width: 400px; height: 400px; margin-bottom:100px"></td>
+              <td style="height:50px"><span th:text="'Step ' + (${index.index + 1})" 
+                              style="font-size: 20px; font-weight: bold; margin-left:20px"></span></td>
+           </tr>
+           <tr>
+                <td style="border-bottom: none;"><div th:text="${content}" style="margin-left:20px"></div></td>
+           </tr>
+      </th:block>
+      </table>
+      
+           <div class="d-flex justify-content-end">
+                  
+                  <!-- 수정 일시 -->
+                  <div th:if="${recipe.modifyDate != null}" class="badge bg-light text-dark p-2 text-start mx-3">
+                         <div class="mb-2">수정됨</div>
+                         <div th:text="${#temporals.format(recipe.modifyDate, 'yyyy-MM-dd HH:mm')}"></div>
+                     </div>
+                         
+                  <!-- 최초 작성 일시 -->      
+                  <div class="badge bg-light text-dark p-2 text-start">
+                     <div th:text="${#temporals.format(recipe.createDate, 'yyyy-MM-dd HH:mm')}"></div>
+                  </div>
+               </div>
+               
+               <!-- 버튼-->
+               <div class="my-3">
+                  
+                  <!-- 질문 수정 버튼 -->
+                      <a th:href="@{|/recipe/modify/${recipe.id}|}" class="btn btn-sm btn-outline-warning"
+                        sec:authorize="isAuthenticated()" th:if="${recipe.author != null and #authentication.getPrincipal().getUsername() == recipe.author.username}"
+                         th:text="수정"></a>
+                           
+                  <!-- 질문 삭제 버튼 -->      
+                  <a th:data-uri="@{|/recipe/delete/${recipe.id}|}" class="delete btn btn-sm btn-outline-warning"
+                     sec:authorize="isAuthenticated()" th:if="${recipe.author != null and #authentication.getPrincipal().getUsername() == recipe.author.username}"
+                     th:text="삭제"></a>
+               </div>
+         </div>
+      </div>
+      
+    <!-- 답변 -->
+   <!-- 답변의 갯수 표시 -->
+   <h5 class="border-bottom my-3 py-2" th:text="|${#lists.size(recipe.answerList)}개의 답변이 있습니다.|"></h5>
+         
+   <!-- 답변 반복 시작 -->
+   <div class="card my-3" th:each="answer : ${recipe.answerList}">
+   
+      <!-- 답변 앵커 추가 -->
+      <a th:id="|answer_${answer.id}|"></a>
+      
+      <div class="card-body">
+         <!-- 마크다운 적용 -->
+         <div class="card-text" th:utext="${@commonUtil.markdown(answer.content)}"></div>
+         <div class="d-flex justify-content-end">
+         
+            <!-- 답변 수정일시 -->
+            <div th:if="${answer.modifyDate != null}" class="badge bg-light text-dark p-2 text-start mx-3">
+                     <div class="mb-2">수정됨</div>
+                     <div th:text="${#temporals.format(answer.modifyDate, 'yyyy-MM-dd HH:mm')}"></div>
+                 </div>
+         
+            <div class="badge bg-light text-dark p-2 text-start">
+               <div class="mb-2">작성자 :
+                  <span th:if="${answer.author != null}" th:text="${answer.author.username}"></span>
+               </div>
+               <div th:text="${#temporals.format(answer.createDate, 'yyyy-MM-dd HH:mm')}"></div>
+            </div>
+         </div>
+            
+         <!-- 버튼 -->
+         <div class="my-3">
+           
+            <!-- 답변 추천 버튼 -->      
+            <a class="recommend btn btn-sm btn-outline-secondary"
+                  th:data-uri="@{|/answer/vote/${answer.id}|}">추천
+                  <span class="badge rounded-pill bg-success" th:text="${#lists.size(answer.voter)}"></span>
+               </a>
+               
+            <!-- 답변 수정 버튼 -->
+                <a th:href="@{|/answer/modify/${answer.id}|}" class="btn btn-sm btn-outline-warning"
+                 sec:authorize="isAuthenticated()" th:if="${answer.author != null and #authentication.getPrincipal().getUsername() == answer.author.username}"
+                    th:text="수정"></a>
+                       
+            <!-- 답변 삭제 버튼 -->      
+            <a th:data-uri="@{|/answer/delete/${answer.id}|}"
+                   class="delete btn btn-sm btn-outline-warning" sec:authorize="isAuthenticated()"
+                  th:if="${answer.author != null and #authentication.getPrincipal().getUsername() == answer.author.username}"
+                  th:text="삭제"></a>
+         </div>
+      </div>
+   </div>
+   <!-- 답변 반복 끝  -->
+      
+   <!-- 답변 작성 -->
+   <form th:action="@{|/answer/create/${recipe.id}|}" th:object="${answerForm}" method="post" class="my-3">
+      <div th:replace="form_errors :: formErrorsFragment"></div>
+         <textarea sec:authorize="isAnonymous()" disabled th:field="*{content}" class="form-control" rows="10"></textarea>
+         <textarea sec:authorize="isAuthenticated()" th:field="*{content}" class="form-control" rows="10"></textarea>
+      <input type="submit" value="답변등록" class="btn btn-warning my-2">
+   </form> 
+   
+</div>
+</html>
