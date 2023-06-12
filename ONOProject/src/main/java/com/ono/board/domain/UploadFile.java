@@ -15,22 +15,24 @@ public class UploadFile {
 
 	@Id
 	@GeneratedValue
+	@Column(name = "id")
 	int id;
 	
-	@Column
+	@Column(name = "filename")
 	String fileName;
 	
-	@Column
+	@Column(name = "savefilename")
 	String saveFileName;
 	
-	@Column
+	@Column(name = "filepath")
 	String filePath;
 	
-	@Column
+	@Column(name = "contenttype")
 	String contentType;
 	
-	@Column
+	@Column(name = "filesize")
 	long fileSize;
 	
+	@Column(name = "regdate")
 	Date regDate;
 }

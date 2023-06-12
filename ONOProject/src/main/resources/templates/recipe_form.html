@@ -21,12 +21,12 @@
                <td><label for="subject" class="form-label">레시피 제목</label></td>
                <td><input type="text" th:field="*{subject}" class="form-control"></td>
                   
-            <!-- 사진 첨부 -->      
-               <td rowspan='3'><label for="file" class="for-label">사진</label>
-                  <input type="file" name="file" th:field="*{file}"onchange="setThumbnail(event);"/>
-                       <div id="image_container"></div>
-                    </td>
-            </tr>
+            <!-- 사진 첨부 -->		
+				<td rowspan='3' class="image_container">
+	                <img style="width:200px;" id="preview-image" src="https://dummyimage.com/200X200/ffffff/000000.gif&text=preview-image">
+	                <input style="display: block;" type="file" id="input-image" onchange="readImage(this)">
+	            </td>
+				</tr>
 
             <!-- 요리소개(cookIntro) -->
             <tr>

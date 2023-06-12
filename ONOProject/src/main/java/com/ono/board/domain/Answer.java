@@ -21,12 +21,14 @@ public class Answer {
 	
 	@Id // Primary Key
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
 	private Integer id; // 답변의 고유 번호
 	
-	@Column(columnDefinition = "TEXT")  // 데이타베이스의 테이블에 있는 컴럼과 동일하게 1:1로 매칭
+	@Column(columnDefinition = "TEXT", name="content" )  // 데이타베이스의 테이블에 있는 컴럼과 동일하게 1:1로 매칭
 	private String content; // 질문(어떤 질문의 답변인지 알아야 하므로 질문 속성이 필요하다)
 	
 	@CreatedDate
+	@Column(name = "createdate")
 	private LocalDateTime createDate; // 답변의 내용
 	
 	@ManyToOne  //  ManyToOne 은 부모 자식 관계를 갖는 구조에서 사용한다. 부모 = Question / 자식 = Answer
@@ -35,6 +37,7 @@ public class Answer {
 	@ManyToOne  // OneToMay => 1:N , ManyToOne => N:1
 	private SiteUser author;    // Answer 속성에 author 속성 추가
 	
+	@Column(name = "modifydate")
 	private LocalDateTime modifyDate;   // 답변 수정 일시 표기
 	
 	@ManyToMany    // N:N
