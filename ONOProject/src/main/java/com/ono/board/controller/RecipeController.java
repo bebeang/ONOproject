@@ -1,6 +1,7 @@
 package com.ono.board.controller;
 
 import java.security.Principal;
+import java.util.List;
 
 import javax.validation.Valid;
 
@@ -85,16 +86,34 @@ public class RecipeController {
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/create")
     public String recipeCreate(@Valid RecipeForm recipeForm,
-            BindingResult bindingResult, Principal principal, MultipartFile file) throws Exception{
+            BindingResult bindingResult, Principal principal) throws Exception {
         if (bindingResult.hasErrors()) {
             return "recipe_form";
-            
         }
+        
         SiteUser siteUser = this.userService.getUser(principal.getName());
-        this.recipeService.create(recipeForm.getSubject(), siteUser, recipeForm.getFile(),
-        		recipeForm.getCookIntro(), recipeForm.getCategory(), recipeForm.getCookInfo_level(), 
-        		recipeForm.getCookInfo_people(), recipeForm.getCookInfo_time(), recipeForm.getIngredient(),
-        		recipeForm.getCapacity(), recipeForm.getContent(), recipeForm.getContentFile());
+        
+        
+        List<MultipartFile> contentFiles = recipeForm.getContentFiles();
+        
+        log.info("contentFiles : " + contentFiles);
+        
+        if (contentFiles == null || contentFiles.isEmpty()) {
+            throw new IllegalArgumentException("Recipe images cannot be null or empty");
+        }
+        
+        MultipartFile file = recipeForm.getFile();
+        log.info("file : " + file);
+        
+        List<MultipartFile> recipeImages = contentFiles.subList(0, contentFiles.size());
+        log.info("recipeImages : " + recipeImages);
+        
+        
+        this.recipeService.create(recipeForm.getSubject(), siteUser, file,
+                recipeForm.getCookIntro(), recipeForm.getCategory(), recipeForm.getCookInfo_level(), 
+                recipeForm.getCookInfo_people(), recipeForm.getCookInfo_time(), recipeForm.getIngredient(),
+                recipeForm.getCapacity(), recipeForm.getContent(), recipeImages);
+        
         log.info("로그(질문작성):" + recipeForm);
         return "redirect:/recipe/list";
     }

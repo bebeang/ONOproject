@@ -83,7 +83,8 @@ public class Recipe {
 	@Column(name = "capacity")
 	private String capacity;           // 재료 량
 	
-	@Column(name ="contentfilepath")
-	private String contentFilePath;    // 레시피 이미지
+	@Column(name = "contentfilepaths")
+	@ElementCollection
+	private List<String> contentFilePaths; // 레시피 순서 이미지
 	
 }

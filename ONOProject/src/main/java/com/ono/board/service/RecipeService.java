@@ -88,51 +88,63 @@ public class RecipeService {
       
       // 레시피 저장 기능
       public void create(String subject, SiteUser user, MultipartFile file, String cookIntro, String category,
-              String cookInfo_level, String cookInfo_people, String cookInfo_time, String ingredient, String capacity,
-              String content, MultipartFile contentFile) throws Exception {
+    	        String cookInfo_level, String cookInfo_people, String cookInfo_time, String ingredient,
+    	        String capacity, String content, List<MultipartFile> contentFiles) throws Exception {
+
+    	  log.info("file : " + file.isEmpty());
+    	  log.info("contentfile : " + contentFiles.isEmpty());
     	  
-		// Check if the parameters are null or empty
-		if (file == null || contentFile == null) {
-		   throw new IllegalArgumentException("File parameters cannot be null");
-		}
-		
-		// 썸네일 저장
-		String projectPath = "D:\\kim\\boot\\files";
-		UUID uuid = UUID.randomUUID();
-		String fileName = uuid + "_" + file.getOriginalFilename();
-		File saveFile = new File(projectPath, fileName);
-		file.transferTo(saveFile);
-		
-		// 레시피 순서 이미지 저장
-		String contentFileName = uuid + "_" + contentFile.getOriginalFilename();
-		File contentSaveFile = new File(projectPath + "/contents", contentFileName);
-		contentFile.transferTo(contentSaveFile);
-		
-	     Recipe r = new Recipe();
-	     
-	     // String projectPath = System.getProperty("user.dir") + "\\src\\main\\resources\\static\\files";
-	     Recipe recipe = new Recipe();
-	     r.setFileName(fileName);
-	     r.setFilePath("/files/" + fileName);
-	     r.setSubject(subject);
-	     r.setCreateDate(LocalDateTime.now());
-	     r.setCookIntro(cookIntro);
-	     r.setCategory(category);
-	     r.setCookInfo(cookInfo_level + cookInfo_people + cookInfo_time);
-	     r.setCookInfo_level(cookInfo_level);
-	     r.setCookInfo_people(cookInfo_people);
-	     r.setCookInfo_time(cookInfo_time);
-	     r.setIngredient(ingredient);
-	     r.setCapacity(capacity);
-	     r.setContent(content);
-	     r.setContentFilePath("/files/contents/" + contentFileName);
-	     r.setAuthor(user);
-	           
-	       this.recipeRepository.save(r);
-	       
-	       log.info("로그create" + r);
+//    	    // Check if the parameters are null or empty
+    	    if (file.isEmpty() || contentFiles.isEmpty()) {
+    	        throw new IllegalArgumentException("File parameters cannot be null or empty");
+   	    }
+    	    
+    	    String projectPath = "D:\\kim\\boot\\files";
+    	    UUID uuid = UUID.randomUUID();
+
+    	    List<String> contentFilePaths = new ArrayList<>();
+
+    	    // 요리 썸네일
+    	    String fileName = uuid + "_" + file.getOriginalFilename();
+    	    File saveFile = new File(projectPath, fileName);
+    	    file.transferTo(saveFile);
+    	    
+    	    log.info("file : " + file);
+    	   
+
+    	    // 레시피 순 이미지
+    	    for (MultipartFile contentFile : contentFiles) {
+    	        String contentFileName = uuid + "_" + contentFile.getOriginalFilename();
+    	        File contentSaveFile = new File(projectPath + "/contents", contentFileName);
+    	        contentFile.transferTo(contentSaveFile);
+    	        contentFilePaths.add("/files/contents/" + contentFileName);
+    	    }
+    	    
+    	    log.info("contentFiles : " + contentFiles);
+
+    	    Recipe r = new Recipe();
+
+    	    // Set the updated fields
+    	    r.setFileName(fileName);
+    	    r.setFilePath("/files/" + fileName);
+    	    r.setSubject(subject);
+    	    r.setCreateDate(LocalDateTime.now());
+    	    r.setCookIntro(cookIntro);
+    	    r.setCategory(category);
+    	    r.setCookInfo(cookInfo_level + cookInfo_people + cookInfo_time);
+    	    r.setCookInfo_level(cookInfo_level);
+    	    r.setCookInfo_people(cookInfo_people);
+    	    r.setCookInfo_time(cookInfo_time);
+    	    r.setIngredient(ingredient);
+    	    r.setCapacity(capacity);
+    	    r.setContent(content);
+    	    r.setContentFilePaths(contentFilePaths);
+    	    r.setAuthor(user);
+
+    	    this.recipeRepository.save(r);
+
+    	    log.info("로그create" + r);
       }
-      		
 
       // 페이징 구현 기능(검색 기능 추가)
       public Page<Recipe> getList(int page, String kw) {

@@ -49,7 +49,7 @@ public class RecipeForm {
 	@Column(name = "content")
     private String content;         // 레시피 내용
 	
-	@Column(name = "contentfile")
-	private MultipartFile contentFile;      // 레시피 이미지
+	@Column(name = "contentfiles")
+	private List<MultipartFile> contentFiles;      // 레시피 순서 이미지
 	
 }
