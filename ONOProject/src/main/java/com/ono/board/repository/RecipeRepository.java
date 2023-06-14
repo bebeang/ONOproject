@@ -14,6 +14,7 @@ import com.ono.board.domain.Recipe;
 
 public interface RecipeRepository extends JpaRepository<Recipe, Integer> {
 	Recipe findBySubject(String subject);   // findBySubject
+	Recipe findBySubjectAndContent(String subject, String content);  // findBySubjectContent
 	List<Recipe> findBySubjectLike(String subject); // findBySubjectLike(특정문자열 포함)
 	Page<Recipe> findAll(Pageable pageable); // 페이징 구현하기
 	Page<Recipe> findAll(Specification<Recipe> spec, Pageable pageable);  // 검색기능

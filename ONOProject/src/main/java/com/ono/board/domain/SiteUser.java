@@ -4,53 +4,87 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-import lombok.Data;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 @Entity
-@Data
-public class SiteUser {
+@Getter
+@Setter
+@ToString
+@NoArgsConstructor
+public class SiteUser extends BaseTimeEntity{
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;          // 게시물 ID
+	private Long id;          // 아이디
 	
-	@Column(nullable = false, unique = true, name = "username")
+	@Column(unique = true)
 	private String username; // 아이디
 	
-	@Column(name = "password")
 	private String password; // 비밀번호
 	
-	@Column(unique = true, name = "email")
+	@Column(nullable = false, unique = true)
 	private String email; // 이메일
 	
-	@Column(name = "name")
+	@Column(nullable = false)
 	private String name; // 이름
 	
-	@Column(name = "nickname")
 	private String nickname; // 닉네임
-
-	@Column(unique = true, name = "mobile")
+	
+	private String profileName; // 프로필사진 이름
+	
+	private String profilePath; // 프로필사진 경로
+	
+	private String gender; // 성별
+	
+	@Column(unique = true)
 	private String mobile; // 휴대폰 번호
 	
-	@Column(name = "zip")
 	private String zip; // 우편번호
 	
-	@Column(name = "address1")
 	private String address1; // 주소
 		
-	@Column(name = "address2")
 	private String address2; // 상세주소
 	
-	@Column(name = "joindate", nullable = false, updatable = false)
+	private Date birthday; // 생년월일
+	
+	@Column(updatable = false)
 	private Date joindate; // 가입일
 	
-	@Column(name = "profileName")
-	private String profileName; // 프로필사진 이름
+	@Enumerated(EnumType.STRING)
+	@Column // (nullable = false)
+	private UserRole role;
+	
+	private String authVendor;
 
-	@Column(name = "profilePath")
-	private String profilePath; // 프로필사진 경로
+	@Builder
+	public SiteUser(String name, String email, String profilePath, String nickname, UserRole role) {
+		this.name = name;
+		this.email = email;
+		this.profilePath = profilePath;
+		this.nickname = nickname;
+		this.role = role;
+	}
+	
+	public SiteUser update(String name, String profilePath, String nickname) {
+		this.name = name;
+		this.profilePath = profilePath;
+		this.nickname = nickname;
+		return this;
+	}
+	
+	public String getRoleKey() {
+		// return this.role.getKey();
+//		return this.role.getKey() == null ? UserRole.USER.getValue() : this.role.getKey();
+		return UserRole.USER.getValue();
+	}
 }

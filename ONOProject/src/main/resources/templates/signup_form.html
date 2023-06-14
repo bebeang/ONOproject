@@ -6,7 +6,7 @@
       <div class="css-signup-main">회원가입</div>
 
       <div class="css-signup-basic">
-         <form th:action="@{/user/signup}" th:object="${userCreateForm}" method="post" enctype="multipart/form-data">
+         <form th:action="@{/user/signup}" th:object="${userCreateFormDto}" method="post" enctype="multipart/form-data">
 
             <div class="css-signup-line">
                <span class="css-pointer">*</span> 필수입력사항
@@ -32,6 +32,7 @@
                   <td><input type="password" name="password1" th:field="*{password1}"
                      class="pw form-control text-center" placeholder="비밀번호를 입력하십시오.">
                      <div class="css-pointer" th:errors="*{password1}"></div></td>
+                     
                </tr>
 
                <!-- 비밀번호 확인 -->
@@ -78,26 +79,29 @@
                <!-- 프로필사진 -->
                <tr>
                   <td><label for="profile" class="form-label">프로필사진</label></td>
-                  <td><input type="file" name="profile" th:field="*{profile}" onchange="setThumbnail(event);"
-                     class="form-control text-center">
-                     <div id="image_container"></div>
-               </tr> 
-
-               <!-- 성별 
+                  <td><input type="file" name="profile" th:field="*{profile}" onchange="readImage(this);"
+                     class="form-control text-center"><br>
+                     <div style="width: 200px; height: 200px; border: 1px solid gray; display: inline-block; overflow: hidden; border-radius: 2%;">
+				         <img style="width: 100%; height: 100%; object-fit: cover;" id="profile-image" src="https://dummyimage.com/200X200/ffffff/000000.gif&text=profile-image">
+				     </div>
+                     <div id="image_container"></div></td>
+               </tr>
+               
+               <!-- 성별 -->
                <tr>
                   <td><label for="gender" class="form-label">성별<spanclass="css-pointer">*</span></label></td>
                   <td class="text-center">
-                     <input type="radio" name="gender" value="m" checked>
+                     <input type="radio" name="gender" value="M" checked>
                         <label class="form-check-label" for="flexCheckDefault" style="margin-right: 50px">남자 </label> 
-                     <input type="radio" name="gender" value="f"> 
+                     <input type="radio" name="gender" value="F"> 
                         <label class="form-check-label" for="flexCheckChecked">여자 </label></td>
-               </tr> -->
+               </tr>
 
                <!-- 휴대폰 번호 -->
                <tr>
                   <td><label for="mobile" class="form-label">핸드폰번호<span
                         class="css-pointer">*</span></label></td>
-                  <td><input type="tex t" name="mobile" th:field="*{mobile}"
+                  <td><input type="text" name="mobile" th:field="*{mobile}"
                      class="form-control text-center" placeholder="핸드폰 번호는 입력하십시오."
                      oninput="checkMobile()"><span id="mobile-check"></span>
                       <div class="css-pointer" th:errors="*{mobile}"></div></td>      
@@ -129,11 +133,11 @@
                      class="form-control text-center" placeholder="상세주소를 입력하십시오."></td>
                </tr>
 
-               <!-- 생년월일 
+               <!-- 생년월일 -->
                <tr>
                   <td><label for="birthday" class="form-label">생년월일</label></td>
                   <td><input type="date" name="birthday" th:field="*{birthday}" class="form-control"></td>
-               </tr> -->
+               </tr>
 
                <!-- 회원가입 버튼 -->
                <tr>
@@ -146,19 +150,21 @@
          </form>
       </div>   
    </div>
+   
    <script>
-   function setThumbnail(event) {
-        var reader = new FileReader();
-
-        reader.onload = function(event) {
-          var img = document.createElement("img");
-          img.setAttribute("src", event.target.result);
-          img.style.width = "150px";
-          img.style.height = "100px";
-          document.querySelector("div#image_container").appendChild(img);
-        };
-
-        reader.readAsDataURL(event.target.files[0]);
-      }
+   // 미리보기 이미지
+    function readImage(input) {
+        const profileImage = input.parentNode.querySelector('img');
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = e => {
+            	profileImage.src = e.target.result;
+            };
+            reader.readAsDataURL(input.files[0]);
+        } else {
+        	profileImage.src = "https://dummyimage.com/200X200/ffffff/000000.gif&text=profile-image";
+        }
+    }
     </script>
-    
+</div>
+</html>

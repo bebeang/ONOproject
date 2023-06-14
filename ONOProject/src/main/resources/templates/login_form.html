@@ -1,4 +1,5 @@
-<html layout:decorate="~{layout}">
+<html layout:decorate="~{layout}"
+xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <div layout:fragment="content" class="container my-3">
 
 	<!-- Error message -->
@@ -52,6 +53,17 @@
 					</tbody>
 				</table>
 			</div>
+			<div style="text-align: center;" >
+			<a href="/oauth2/authorization/naver" role="button">
+				<img src="/image/naverButton.png" alt="Naver Button" style="width: 200px;">
+			</a>
+			</div>
+				 
+			<!-- <a href="/oauth2/authorization/google" 
+				class="btn btn-secondary active" role="button">Google Login</a>
+					
+			<a href="/oauth2/authorization/kakao" 
+				class="btn btn-secondary active" role="button">Kakao Login</a> -->
 		</div>
 	</form>
 	

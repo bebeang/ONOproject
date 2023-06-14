@@ -6,7 +6,7 @@ import javax.validation.constraints.NotEmpty;
 import lombok.Data;
 
 @Data
-public class AnswerForm {
+public class AnswerFormDto {
 	
     @NotEmpty(message = "내용은 필수항목입니다.")
     @Column(name ="content")

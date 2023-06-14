@@ -4,7 +4,8 @@
    <!-- 질문등록 -->
    <h5 class="my-5 border-bottom pb-2">레시피 등록</h5>
    
-   <form th:object="${recipeFormDto}" method="post" enctype="multipart/form-data">
+   <form th:object="${recipeFormDto}" method="post"
+      enctype="multipart/form-data">
       <input type="hidden" th:name="${_csrf.parameterName}"
          th:value="${_csrf.token}" />
       <div th:replace="form_errors :: formErrorsFragment"></div>
@@ -20,14 +21,12 @@
                <td><label for="subject" class="form-label">레시피 제목</label></td>
                <td><input type="text" th:field="*{subject}" class="form-control"></td>
                   
-               <!-- 사진 첨부 -->
-            <td rowspan='3'>
-               <div class="image-container">
-                       <img style="width:200px;" id="preview-image" src="https://dummyimage.com/200X200/ffffff/000000.gif&text=preview-image">
-                       <input style="display: block;" type="file" name="file" th:field="*{file}" onchange="readImage(this)">
-                   </div>
-            </td>
-         </tr>
+            <!-- 사진 첨부 -->      
+               <td rowspan='3' class="image_container">
+                      <img style="width:200px;" id="preview-image" src="https://dummyimage.com/200X200/ffffff/000000.gif&text=preview-image">
+                      <input style="display: block;" type="file" id="input-image" th:field="*{file}" onchange="readImage(this)">
+                  </td>
+            </tr>
 
             <!-- 요리소개(cookIntro) -->
             <tr>
@@ -135,21 +134,20 @@
       <hr style="border:solid 5px gray;">
       
        <!-- 재료(ingredient) / 용량(capacity) -->
-       
        <div class="mb-3" >
            <div class="form-label" style="margin-left:30px">
                <label for="content_name" class="form-label">요리재료</label>
                <div style="color:gray">&ensp;재료가 남거나 부족하지 않도록 정확한 계량정보를 적어주세요.<br></div>
           </div>
           
-           <div class="form-label" id="ingredient" style="margin-left: 150px">
-              <input type="text" name="ingredient" th:field="*{ingredient}" placeholder="예) 돼지고기" style="width: 400px; margin-bottom: 10px">
-              <input type="text" name="capacity" th:field="*{capacity}" placeholder="예) 300g" style="width: 400px; margin-bottom: 10px">
-              <input type="button" value="추가" class="btn btn-outline-warning btn-sm" onclick="add_ingredientbox()">
-          </div>
+           <div class="form-label" id="ingredient" style="margin-left:150px">
+               <input type="text"  name="ingredient" placeholder=" 예) 돼지고기" style="width:400px; margin-bottom:10px">
+               <input type="text"  name="capacity" placeholder=" 예) 300g" style="width:400px; margin-bottom:10px">    
+               <input type="button" value="추가" class="btn btn-outline-warning btn-sm" onclick="add_ingredientbox()">
+           </div>
         </div>   
            
-       <hr style="border:solid 5px gray;"> 
+       <hr style="border:solid 5px gray;">
        
        <!-- 요리순서(content) -->
         <div class="mb-3" style="margin-left:30px">
@@ -159,22 +157,22 @@
             <div style="color:gray; margin-left:37px">마늘편은 익혀주세요. ▷ 마늘편을 충분히 익혀주셔야 매운 맛이 사라집니다.<br></div>
             <div style="color:gray; margin-left:37px">꿀을 조금 넣어주세요. ▷ 꿀이 없는 경우, 설탕 1스푼으로 대체 가능 합니다.</div>
         </div>
-                
-       <table style="margin-left:150px">
-            <tbody id="content">
-                <tr class="form-label">
-                    <td><label class="form-label" style="margin-right:10px">STEP1</label></td>
-                    <td><input type="text" name="content" style="width:350px; height:200px; margin-bottom:40px"></td>
-                    <td class="image-container">
-                        <img style="width:200px;" id="preview-image" src="https://dummyimage.com/200X200/ffffff/000000.gif&text=preview-image">
-                        <input style="display: block;" type="file" name="contentFiles" onchange="readImage(this)">
-                    </td>
-                    <td><input type="button" value="추가" class="btn btn-outline-warning btn-sm" onclick="add_contentbox()"></td>
-                </tr>
-            </tbody>
-        </table>
         
-        <hr style="border:solid 5px gray;"> 
+       <table style="margin-left:150px">
+          <tbody id="content">
+              <tr class="form-label">
+                  <td><label for="step1" class="form-label" style="margin-right:10px">STEP1</label></td>
+                  <td><input type="text" name="content" th:field="*{content}" style="width:350px; height:200px; margin-bottom:40px"></td>
+                  <td class="image-container">
+                      <img style="width:200px;" id="preview-image" src="https://dummyimage.com/200X200/ffffff/000000.gif&text=preview-image">
+                      <input style="display: block;" type="file" id="input-image" onchange="readImage(this)">
+                  </td>
+                  <td><input type="button" value="추가" class="btn btn-outline-warning btn-sm" onclick="add_contentbox()"></td>
+              </tr>
+          </tbody>
+      </table>
+        
+        <hr style="border:solid 5px gray;">
         
         <!-- 버튼 -->
         <div class="d-flex justify-content-center">
@@ -183,57 +181,54 @@
       
    </form>
 
-    <script>
-     // input box(ingredient)
-        const add_ingredientbox = () => {
+   <script>
+      // input box(ingredient)
+      const add_ingredientbox = () => {
             const box = document.getElementById("ingredient");
             const newP = document.createElement('p');
-            newP.innerHTML = `<input type='text' name='ingredient' style='width: 400px'> 
-                          <input type='text' name='capacity' style='width: 400px'> 
-                          <input type='button' value='삭제' class='btn btn-outline-warning btn-sm' onclick='removeIngredient(this)'>`;
+            newP.innerHTML = "<input type='text' name='ingredient' style='width:400px'> <input type='text' name='capacity' style='width:400px'> <input type='button' value='삭제' class='btn btn-outline-warning btn-sm' onclick='removeIngredient(this)'>";
             box.appendChild(newP);
         }
-   
         const removeIngredient = (obj) => {
             document.getElementById('ingredient').removeChild(obj.parentNode);
         }
-   
-     // input box(content)
-        let rowCount = 1;
-     
-     // 추가
-     const add_contentbox = () => {
-         const table = document.getElementById("content");
-         const newRow = document.createElement('tr');
-         newRow.innerHTML = `
-             <td><label class="form-label" style="margin-right:10px">STEP${rowCount}</label></td>
-             <td><input type="text" name="content" style="width:350px; height:200px; margin-bottom:40px"></td>
-             <td class="image-container">
-                 <img style="width:200px;" id="preview-image-${rowCount}" src="https://dummyimage.com/200X200/ffffff/000000.gif&text=preview-image">
-                 <input style="display: block;" type="file" name="contentFiles" onchange="readImage(this)">
-             </td>
-             <td><input type="button" value="삭제" class="btn btn-outline-warning btn-sm" onclick="removeContent(this)"></td>
-         `;
-         table.appendChild(newRow);
-         updateStepNumbers();
-         rowCount++;
-     }
-     
-     // 삭제
-     const removeContent = (obj) => {
-         const row = obj.parentNode.parentNode;
-         row.parentNode.removeChild(row);
-         updateStepNumbers();
-     }
-     
-     // label count
-     const updateStepNumbers = () => {
-         const rows = document.getElementById('content').getElementsByTagName('tr');
-         for (let i = 0; i < rows.length; i++) {
-             const label = rows[i].querySelector('label');
-             label.innerText = `STEP${i + 1}`;
-         }
-     }
+        
+        // input box(content)
+      let rowCount = 1;
+      
+        // 추가
+      const add_contentbox = () => {
+          const table = document.getElementById("content");
+          const newRow = document.createElement('tr');
+          newRow.innerHTML = `
+              <td><label for="step${rowCount}" class="form-label" style="margin-right:10px">STEP${rowCount}</label></td>
+              <td><input type="text" name="content" th:field="*{content}" style="width:350px; height:200px; margin-bottom:40px"></td>
+              <td class="image-container">
+                  <img style="width:200px;" id="preview-image-${rowCount}" src="https://dummyimage.com/200X200/ffffff/000000.gif&text=preview-image">
+                  <input style="display: block;" type="file" id="input-image-${rowCount}" onchange="readImage(this)">
+              </td>
+              <td><input type="button" value="삭제" class="btn btn-outline-warning btn-sm" onclick="removeContent(this)"></td>
+          `;
+          table.appendChild(newRow);
+          updateStepNumbers();
+          rowCount++;
+      }
+      
+      // 삭제
+      const removeContent = (obj) => {
+          const row = obj.parentNode.parentNode;
+          row.parentNode.removeChild(row);
+          updateStepNumbers();
+      }
+      
+      // label count
+      const updateStepNumbers = () => {
+          const rows = document.getElementById('content').getElementsByTagName('tr');
+          for (let i = 0; i < rows.length; i++) {
+              const label = rows[i].querySelector('label');
+              label.innerText = `STEP${i + 1}`;
+          }
+      }
       
       // 미리보기 이미지
       function readImage(input) {

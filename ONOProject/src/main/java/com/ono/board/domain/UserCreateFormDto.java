@@ -15,11 +15,11 @@ import org.springframework.web.multipart.MultipartFile;
 import lombok.Data;
 
 @Data
-public class UserCreateForm {
+public class UserCreateFormDto {
 	
 	/** 아이디 */
 	@Pattern(regexp="[a-zA-Z]{1}\\w{5,19}",
-			 message="비밀번호는 영문을 포함한 6~20자로 입력하십시오.")
+			 message="아이디는 영문을 포함한 6~20자로 입력하십시오.")
 	@NotEmpty(message="아이디는 필수사항입니다.")
 	private String username;
 	
@@ -52,11 +52,14 @@ public class UserCreateForm {
 	@NotEmpty(message="닉네임은 필수사항입니다.")
 	private String nickname;
 	
-//	/** 성별 */
-//	@Pattern(regexp="[f, m]{1}",
-//			message="회원 성별을 입력하십시오.")
-//	@NotEmpty(message="성별은 필수사항입니다.")
-//	private String gender;
+	/** 프로필사진 */
+	private MultipartFile profile;
+	
+	/** 성별 */
+	@Pattern(regexp="[F, M]{1}",
+			message="회원 성별을 입력하십시오.")
+	@NotEmpty(message="성별은 필수사항입니다.")
+	private String gender;
 	
 	/** 휴대폰 번호 */
 	@Pattern(regexp="010-\\d{4}-\\d{4}",
@@ -75,19 +78,52 @@ public class UserCreateForm {
 	/** 상세주소 */
 	private String address2;
 	
-//	/** 생년월일*/
-//	@Past(message="생일은 금일 기준 이전 일이 들어가야 합니다.")
-//	@DateTimeFormat(pattern="yyyy-MM-dd")
-//	@Temporal(TemporalType.DATE)
-//	private Date birthday;
+	/** 생년월일*/
+	@Past(message="생일은 금일 기준 이전 일이 들어가야 합니다.")
+	@DateTimeFormat(pattern="yyyy-MM-dd")
+	@Temporal(TemporalType.DATE)
+	private Date birthday;
 	
 	/** 가입일 */
 	private Date joindate;
 	
-//	/** 등급 */
-//	private String grade;
+	/** Role */
+	private UserRole role;
 	
-	/** 프로필사진 */
-	private MultipartFile profile;
-	
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("UserCreateForm [username=");
+		builder.append(username);
+		builder.append(", password1=");
+		builder.append(password1);
+		builder.append(", password2=");
+		builder.append(password2);
+		builder.append(", email=");
+		builder.append(email);
+		builder.append(", name=");
+		builder.append(name);
+		builder.append(", nickname=");
+		builder.append(nickname);
+		builder.append(", profile=");
+		builder.append(profile == null ? "첨부없음" : profile.getOriginalFilename()); // 파일명
+		builder.append(", gender=");
+		builder.append(gender);
+		builder.append(", mobile=");
+		builder.append(mobile);
+		builder.append(", zip=");
+		builder.append(zip);
+		builder.append(", address1=");
+		builder.append(address1);
+		builder.append(", address2=");
+		builder.append(address2);
+		builder.append(", birthday=");
+		builder.append(birthday);
+		builder.append(", joindate=");
+		builder.append(joindate);
+		builder.append(", role=");
+		builder.append(role);
+		builder.append("]");
+		return builder.toString();
+	}
 }
