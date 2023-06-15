@@ -2,35 +2,44 @@
 <div layout:fragment="content" class="container my-3">
 	
     <!-- Recipe List -->
-		<table class="table">
-			<thead class="table-dark">
-				<tr class="text-center">
-					<th>번호</th>
-					<th style="width:50%">제목</th>
- 				    <th>글쓴이</th>
-					<th>작성일시</th>
-					<th>추천수</th>
-					<th>조회수</th>
-				</tr>
-			</thead>
+      <table class="table table-bordered border-primary">
+         <thead class="table">
+            <tr class="text-center">
+               <th>번호</th>
+               <th>요리사진</th>
+               <th style="width:30%">제목</th>
+                 <th>글쓴이</th>
+               <th>작성일시</th>
+               <th>추천수</th>
+               <th>조회수</th>
+            </tr>
+         </thead>
 			
-			<tbody>
-				<tr class="text-center" th:each="recipe, loop : ${paging}">
-				    <td th:text="${paging.getTotalElements - (paging.number * paging.size) - loop.index}"></td>
-					<td class="text-center">
-						<a th:href="@{|/recipe/detail/${recipe.id}|}" th:text="${recipe.subject}"></a>
-						<span class="text-danger small ms-2"
+		<tbody class="text-center">
+            <tr th:each="recipe, loop : ${paging}">
+               <td th:text="${paging.getTotalElements - (paging.number * paging.size) - loop.index}"></td>
+               
+               <td> 
+                <a th:href="@{|/recipe/detail/${recipe.id}|}" >
+               <img th:src="${recipe.filePath}" style="width: 60px; height: 60px;" alt="Thumbnail"></a>
+               </td>
+               
+               <td>
+                  <a th:href="@{|/recipe/detail/${recipe.id}|}" th:text="${recipe.subject}">
+                  </a>
+                  
+                  <span class="text-danger small ms-2"
                         th:if="${#lists.size(recipe.answerList) > 0}" 
                         th:text="${#lists.size(recipe.answerList)}">
                     </span>
-					</td>
-					<td><span th:if="${recipe.author != null}" th:text="${recipe.author.email}"></span></td>
-					<td th:text="${#temporals.format(recipe.createDate, 'yyyy-MM-dd HH:mm')}"></td>
-					<td><span th:text="${#sets.size(recipe.voter)}"></span></td> <!-- 추천수 출력 -->
-					<td><span th:text="${recipe.view}"></span></td> <!-- 조회수 출력 -->
-				</tr>
-			</tbody>
-		</table>
+               </td>
+               <td><span th:if="${recipe.author != null}" th:text="${recipe.author.email}"></span></td>
+               <td th:text="${#temporals.format(recipe.createDate, 'yyyy-MM-dd HH:mm')}"></td>
+               <td><span th:text="${#sets.size(recipe.voter)}"></span></td> <!-- 추천수 출력 -->
+               <td><span th:text="${recipe.view}"></span></td> <!-- 조회수 출력 -->
+            </tr>
+         </tbody>
+      </table>
 		
 		<!-- 페이징처리 시작 -->
 		<div th:if="${!paging.isEmpty()}">
