@@ -1,100 +1,131 @@
 <html layout:decorate="~{layout}">
 <div layout:fragment="content" class="container my-3">
 
-	<!-- 메인 이미지 -->
-	<div id="carouselExampleControls" class="carousel slide"
-		data-bs-ride="carousel">
-		<div class="carousel-inner" style="margin-top: 50px">
-			<div class="carousel-item active">
-				<a href="https://pages.coupang.com/p/88703"> <img
-					src="/image/ad_1.jpg" class="d-block w-100" alt="AD1" width="100%"
-					height="400px">
-				</a>
-			</div>
-			<div class="carousel-item">
-				<a href="https://pages.coupang.com/f/s20787"> <img
-					src="/image/ad_2.jpg" class="d-block w-100" alt="AD2" width="100%"
-					height="400px">
-				</a>
-			</div>
-			<!-- 이미지 갤러리 부분 끝 -->
+<style>
+a {
+   text-decoration: none
+}
 
-			<!-- 메인 이미지 선택버튼 -->
-			<button class="carousel-control-prev" type="button"
-				data-bs-target="#carouselExampleControls" data-bs-slide="prev">
-				<span class="carousel-control-prev-icon" aria-hidden="true"></span>
-				<span class="visually-hidden">Previous</span>
-			</button>
+a:visited {
+   color: black;
+}
 
-			<button class="carousel-control-next" type="button"
-				data-bs-target="#carouselExampleControls" data-bs-slide="next">
-				<span class="carousel-control-next-icon" aria-hidden="true"></span>
-				<span class="visually-hidden">Next</span>
-			</button>
-		</div>
-	</div>
-	<!-- 메인 이미지 끝 -->
+a:hover {
+   color: #FFC107;
+   
+}
+</style>
 
-	<!-- 오늘의 HOT레시피 -->
-	<div class="screen" style="margin-top: 50px; text-align: center;">
-		<div class="container mt-3">
-			<table class="table table-borderless">
-				<a href="/recipe/list"><h4>오늘의 HOT 레시피</h4></a>
-				<tr>
-					<th th:each="recipe, loop : ${paging1}">
-						<div class="card" style="width: 15rem;">
-							<img th:src="${recipe.filePath}"
-								style="width: 239px; height: 200px;" class="card-img-top"
-								alt="...">
-							<div class="card-body">
-								<h5 class="card-title">
-									<img th:src="${siteUsers1.get(loop.index).profilePath}"
-										class="rounded-circle" width="35px" height="35px"> <span
-										th:if="${recipe.author != null}"
-										th:text="${recipe.author.nickname}"></span>
-								</h5>
-								<div class="card-text">
-									<a th:href="@{|/recipe/detail/${recipe.id}|}"
-										th:text="${recipe.subject}"></a>
-								</div>
-								추천수 : <span th:text="${#sets.size(recipe.voter)}"></span>
-							</div>
-						</div>
-					</th>
-				</tr>
-			</table>
+   <!-- 메인 이미지 -->
+   <div id="carouselExampleControls" class="carousel slide"
+      data-bs-ride="carousel">
+      <div class="carousel-inner" style="margin-top: 50px">
+         <div class="carousel-item active">
+            <a href="https://pages.coupang.com/p/88703"> <img
+               src="/image/ad_1.jpg" class="d-block w-100" alt="AD1" width="100%"
+               height="400px">
+            </a>
+         </div>
+         
+         <div class="carousel-item">
+            <a href="https://pages.coupang.com/f/s20787"> <img
+               src="/image/ad_2.jpg" class="d-block w-100" alt="AD2" width="100%"
+               height="400px">
+            </a>
+         </div>
+         <!-- 이미지 갤러리 부분 끝 -->
 
-		<!-- 따끈따끈한 NEW 레시피 -->
-		<div class="screen" style="margin-top: 50px; text-align: center;">
-			<div class="container mt-3">
-				<table class="table table-borderless">
-					<a href="/recipe/list"><h4>따끈따끈한 NEW 레시피</h4></a>
-					<tr>
-						<th th:each="recipe, loop : ${paging2}">
-							<div class="card" style="width: 15rem;">
-								<img th:src="${recipe.filePath}"
-									style="width: 239px; height: 200px;" class="card-img-top"
-									alt="...">
-								<div class="card-body">
-									<h5 class="card-title">
-										<img th:src="${siteUsers2.get(loop.index).profilePath}"
-											class="rounded-circle" width="35px" height="35px"> <span
-											th:if="${recipe.author != null}"
-											th:text="${recipe.author.nickname}"></span>
-									</h5>
-									<div class="card-text">
-										<a th:href="@{|/recipe/detail/${recipe.id}|}"
-											th:text="${recipe.subject}"></a>
-									</div>
-									추천수 : <span th:text="${#sets.size(recipe.voter)}"></span>
-								</div>
-							</div>
-						</th>
-					</tr>
-				</table>
-			</div>
-		</div>
-	</div>
-	</div>
+         <!-- 메인 이미지 선택버튼 -->
+         <button class="carousel-control-prev" type="button"
+            data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+         </button>
+
+         <button class="carousel-control-next" type="button"
+            data-bs-target="#carouselExampleControls" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+         </button>
+      </div>
+   </div>
+   <!-- 메인 이미지 끝 -->
+
+   <!-- 오늘의 HOT레시피 -->
+   <div class="screen" style="margin-top: 50px;">
+      <div class="container mt-3">
+         <table class="table table-borderless">
+            <a href="/recipe/list" style="text-align: center;"><h4>오늘의
+                  HOT 레시피</h4></a>
+            <tr>
+               <th th:each="recipe, loop : ${paging1}">
+                  <div class="card" style="width: 15rem;">
+                     <a th:href="@{|/recipe/detail/${recipe.id}|}"> <img th:src="${recipe.filePath}"
+                        style="width: 239px; height: 200px;" class="card-img-top"
+                        alt="..."></a>
+                     <div class="card-body">
+                        <div class="card-text">
+                           <h5>
+                              <a th:href="@{|/recipe/detail/${recipe.id}|}"
+                                 th:text="${recipe.subject}"></a>
+                           </h5>
+                        </div>
+                        <h5 class="card-title">
+                           <img th:src="${siteUsers1.get(loop.index).profilePath}"
+                              class="rounded-circle" width="30px" height="30px"> <span
+                              th:if="${recipe.author != null}"
+                              th:text="${recipe.author.nickname}" style="font-size: 15px;"></span>
+                        </h5>
+                        <span style="font-size: 13px;"> 조회수 <span
+                           th:text="${recipe.view}"></span> &nbsp;|&nbsp; <span
+                           style="font-size: 13px;"> ♡ <span
+                              th:text="${#sets.size(recipe.voter)}"></span>
+                        </span>
+                        </span>
+                     </div>
+                  </div>
+               </th>
+            </tr>
+         </table>
+
+         <!-- 따끈따끈한 NEW 레시피 -->
+         <div class="screen" style="margin-top: 100px;">
+            <div class="container mt-3">
+               <table class="table table-borderless">
+                  <a href="/recipe/list" style="text-align: center;"><h4>따끈따끈한
+                        NEW 레시피</h4></a>
+                  <tr>
+                     <th th:each="recipe, loop : ${paging2}">
+                        <div class="card" style="width: 15rem;">
+                           <a th:href="@{|/recipe/detail/${recipe.id}|}"> <img th:src="${recipe.filePath}"
+                              style="width: 239px; height: 200px;" class="card-img-top"
+                              alt="..."></a>
+                           <div class="card-body">
+                              <div class="card-text">
+                                 <h5>
+                                    <a th:href="@{|/recipe/detail/${recipe.id}|}"
+                                       th:text="${recipe.subject}"></a>
+                                 </h5>
+                              </div>
+                              <h5 class="card-title">
+                                 <img th:src="${siteUsers2.get(loop.index).profilePath}"
+                                    class="rounded-circle" width="30px" height="30px"> <span
+                                    th:if="${recipe.author != null}"
+                                    th:text="${recipe.author.nickname}" style="font-size: 15px;"></span>
+                              </h5>
+                              <span style="font-size: 13px;"> 조회수 <span
+                                 th:text="${recipe.view}"></span> &nbsp;|&nbsp; <span
+                                 style="font-size: 13px;"> ♡ <span
+                                    th:text="${#sets.size(recipe.voter)}"></span>
+                              </span>
+                           </div>
+                        </div>
+                     </th>
+                  </tr>
+               </table>
+            </div>
+         </div>
+      </div>
+   </div>
 </div>
-</html>
+</html>  

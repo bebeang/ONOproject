@@ -12,7 +12,7 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 		<div class="css-signup-form">
 
 			<!-- 회원가입 타이틀 -->
-			<div class="css-signup-main">로그인</div>
+			<div class="css-signup-main" style="margin-top:50px;">로그인</div>
 
 			<!-- body부분 -->
 			<div class="css-signup-basic">
@@ -48,16 +48,13 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 						<tr>
 							<td></td>
 							<td><button type="submit" class="btn btn-warning"
-									style="width: 500px;">로그인</button></td>
+									style="width: 245px; height: 60px;">로그인</button>
+						    <a href="/oauth2/authorization/naver" role="button">
+								<img src="/image/naverButton.png" alt="Naver Button" style="width: 245px; height: 60px;">
+							</a></td>			
 						</tr>
 					</tbody>
 				</table>
-			</div>
-			<div style="text-align: center;" >
-			<a href="/oauth2/authorization/naver" role="button">
-				<img src="/image/naverButton.png" alt="Naver Button" style="width: 200px;">
-			</a>
-			</div>
 				 
 			<!-- <a href="/oauth2/authorization/google" 
 				class="btn btn-secondary active" role="button">Google Login</a>

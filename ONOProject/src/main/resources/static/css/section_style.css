@@ -14,13 +14,4 @@
        height: 50px;
    }
    
-   a { 
-      text-decoration:none
-      }
-   a:visited {
-     color : black;
-   }
-   a:hover {
-     color : #FFC107;
-   }
 </style>
