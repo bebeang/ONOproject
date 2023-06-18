@@ -78,140 +78,175 @@ public class MypageController {
 		return "mypage";
 	}
 
-	@PostMapping("/mypage") //
-	public String modify(@Valid @ModelAttribute("userModifyForm") UserModifyFormDto userModifyForm,
-			BindingResult bindingResult, Model model, Principal principal) {
-		log.info("회원정보수정");
-		log.info("set userModifyForm(전송) : " + userModifyForm);
+	   @PostMapping("/mypage")
+	   public String modify(@Valid @ModelAttribute("userModifyForm") UserModifyFormDto userModifyForm,
+	         BindingResult bindingResult, Model model, Principal principal) {
+	      log.info("회원정보수정");
+	      log.info("set userModifyForm(전송) : " + userModifyForm);
 
-		if (bindingResult.hasErrors()) {
-			return "mypage";
-		}
+	      if (bindingResult.hasErrors()) {
+	         return "mypage";
+	      }
 
-		// 현재 비밀번호와 일치하지 않을때 + 비밀번호 1번 2번이 다를때
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		
-		if (principal instanceof UsernamePasswordAuthenticationToken) {
-			String username = authentication.getName();
-	
-			Optional<SiteUser> optionalUser = userRepository.findByUsername(username);
-			if (optionalUser.isPresent()) {
-				SiteUser siteUser = optionalUser.get();
-	
-				if (!passwordEncoder.matches(userModifyForm.getPassword_now(), siteUser.getPassword())) {
-					bindingResult.rejectValue("password_now", "password.mismatch", "~");
-	
-					log.info("현재 비밀번호 불일치");
-					log.info("현재 비밀번호 : " + siteUser.getPassword());
-					log.info("확인용 비밀번호 : " + userModifyForm.getPassword_now());
-	
-					return "mypage";
-				}
-	
-				if (!userModifyForm.getPassword1().equals(userModifyForm.getPassword2())) {
-					bindingResult.rejectValue("password2", "passwordInCorrect", "2개의 패스워드가 일치하지 않습니다.");
-					log.info("두 비밀번호 불일치");
-					return "mypage";
-				}
-			}
-	
-			try {
-				userService.modify(userModifyForm.getUsername(), userModifyForm.getPassword1(), userModifyForm.getEmail(),
-						userModifyForm.getNickname(), userModifyForm.getMobile(), userModifyForm.getZip(),
-						userModifyForm.getAddress1(), userModifyForm.getAddress2());
-	
-			} catch (DataIntegrityViolationException e) {
-				e.printStackTrace();
-				bindingResult.reject("modifyFailed", "개인정보 수정에 실패했습니다.");
-				log.info("첫번째 캐치문");
-				return "mypage";
-	
-			} catch (Exception e) {
-				e.printStackTrace();
-				bindingResult.reject("modifyFailed", e.getMessage());
-				log.info("두번째 캐치문");
-				return "mypage";
-			}
-		} else if (principal instanceof OAuth2AuthenticationToken) {
-			
-		}
+	      // 현재 비밀번호와 일치하지 않을때 + 비밀번호 1번 2번이 다를때
+	      Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	      
+	      if (principal instanceof UsernamePasswordAuthenticationToken) {
+	         String username = authentication.getName();
+	   
+	         Optional<SiteUser> optionalUser = userRepository.findByUsername(username);
+	         if (optionalUser.isPresent()) {
+	            SiteUser siteUser = optionalUser.get();
+	   
+	            if (!passwordEncoder.matches(userModifyForm.getPassword_now(), siteUser.getPassword())) {
+	               bindingResult.rejectValue("password_now", "password.mismatch", "~");
+	   
+	               log.info("현재 비밀번호 불일치");
+	               log.info("현재 비밀번호 : " + siteUser.getPassword());
+	               log.info("확인용 비밀번호 : " + userModifyForm.getPassword_now());
+	   
+	               return "mypage";
+	            }
+	   
+	            if (!userModifyForm.getPassword1().equals(userModifyForm.getPassword2())) {
+	               bindingResult.rejectValue("password2", "passwordInCorrect", "2개의 패스워드가 일치하지 않습니다.");
+	               log.info("두 비밀번호 불일치");
+	               return "mypage";
+	            }
+	         }
+	   
+	         try {
+	            userService.modify(userModifyForm.getUsername(), userModifyForm.getPassword1(), userModifyForm.getEmail(),
+	                  userModifyForm.getNickname(), userModifyForm.getMobile(), userModifyForm.getZip(),
+	                  userModifyForm.getAddress1(), userModifyForm.getAddress2());
+	   
+	         } catch (DataIntegrityViolationException e) {
+	            e.printStackTrace();
+	            bindingResult.reject("modifyFailed", "개인정보 수정에 실패했습니다.");
+	            log.info("첫번째 캐치문");
+	            return "mypage";
+	   
+	         } catch (Exception e) {
+	            e.printStackTrace();
+	            bindingResult.reject("modifyFailed", e.getMessage());
+	            log.info("두번째 캐치문");
+	            return "mypage";
+	         }
+	      } else if (principal instanceof OAuth2AuthenticationToken) {
+	         //log.info("네이버 로그인 : " + principal.);
+	         log.info("userEmail : " + userService.getEmailFromPrincipal(principal));
+	         try {
+	            log.info("getZip : " + userModifyForm.getZip());
+	            String userEmail = userService.getEmailFromPrincipal(principal);
+	            userService.modify_naver(userEmail,userModifyForm.getNickname(),
+	                  userModifyForm.getGender(), userModifyForm.getZip(),
+	                  userModifyForm.getAddress1(), userModifyForm.getAddress2());
+	   
+	         } catch (DataIntegrityViolationException e) {
+	            e.printStackTrace();
+	            bindingResult.reject("modifyFailed", "개인정보 수정에 실패했습니다.");
+	            log.info("첫번째 캐치문");
+	            return "mypage";
+	   
+	         } catch (Exception e) {
+	            e.printStackTrace();
+	            bindingResult.reject("modifyFailed", e.getMessage());
+	            log.info("두번째 캐치문");
+	            return "mypage";
+	         }
+	      }
+	      // 추가
+	      model.addAttribute("userModifyForm", userModifyForm);
+	      // 개인정보수정 완료 시 index페이지로 돌아가기
+	      return "redirect:/index";
+	   }
 
-		// 추가
-		model.addAttribute("userModifyForm", userModifyForm);
-		// 개인정보수정 완료 시 index페이지로 돌아가기
-		return "redirect:/index";
-	}
+	   @ResponseBody
+	   @PostMapping("/update-profile-pic")
+	   public String updateProfilePic(@RequestParam("profilePicPreview") MultipartFile profile, Principal principal) {
+	      SiteUser siteUser = new SiteUser();
+	      Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-	@ResponseBody
-	@PostMapping("/update-profile-pic")
-	public String updateProfilePic(@RequestParam("profilePicPreview") MultipartFile profile) {
+	      if (principal instanceof OAuth2AuthenticationToken) {
+	         String email = this.userService.getEmailFromPrincipal(principal);
+	         log.info("email : " + email);
+	         Optional<SiteUser> optionalUser = userRepository.findByEmail(email);
+	         log.info("optionalUser : " + optionalUser);
+	         if (optionalUser.isPresent()) {
+	            siteUser = optionalUser.get();
+	            log.info("siteUser : " + siteUser);
+	         }
+	      } else if (principal instanceof UsernamePasswordAuthenticationToken) {
+	         String username = authentication.getName();
+	         Optional<SiteUser> optionalUser = userRepository.findByUsername(username);
+	         if (optionalUser.isPresent()) {
+	            siteUser = optionalUser.get();
+	         }
+	      }
 
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		String username = authentication.getName();
+	      String profilePath = "D:\\kim\\boot\\profiles";
+	      String previous_ProfilePath = siteUser.getProfilePath();
+	      File previousProfile = new File(previous_ProfilePath);
 
-		Optional<SiteUser> optionalUser = userRepository.findByUsername(username);
+	      log.info("previous : " + previous_ProfilePath);
+	      previousProfile.delete();
 
-		if (optionalUser.isPresent()) {
-			SiteUser user = optionalUser.get();
-			log.info(username);
+	      UUID uuid = UUID.randomUUID();
+	      String profileName = uuid + "_" + profile.getOriginalFilename();
+	      File saveProfile = new File(profilePath, profileName);
+	      try {
+	         profile.transferTo(saveProfile);
+	      } catch (IllegalStateException e) {
+	         e.printStackTrace();
+	      } catch (IOException e) {
+	         e.printStackTrace();
+	      }
+	      siteUser.setProfileName(profileName);
+	      siteUser.setProfilePath("/profiles/" + profileName);
+	      userRepository.save(siteUser);
+	      
+	      return "mypage/modifyProfile";
+	   }
+	   
+	   @ResponseBody
+	   @PostMapping("/delete-profile-pic")
+	   public String deleteProfilePic(Principal principal) {
+	      SiteUser siteUser = new SiteUser();
+	      Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	      if (principal instanceof OAuth2AuthenticationToken) {
+	         String email = this.userService.getEmailFromPrincipal(principal);
+	         Optional<SiteUser> optionalUser = userRepository.findByEmail(email);
+	         if (optionalUser.isPresent()) {
+	            siteUser = optionalUser.get();
+	         }
+	      } else if (principal instanceof UsernamePasswordAuthenticationToken) {
+	         String username = authentication.getName();
+	         Optional<SiteUser> optionalUser = userRepository.findByUsername(username);
+	         if (optionalUser.isPresent()) {
+	            siteUser = optionalUser.get();
+	         }
+	      }
 
-			String profilePath = "D:\\kim\\boot\\profiles";
-			String previous_ProfilePath = profilePath + user.getProfileName();
-			File previousProfile = new File(previous_ProfilePath);
+	      String defaultProfilePath = "/image/기본 프로필.jfif";
+	      String defaultProfileName = "기본 프로필.jfif";
 
-			log.info(previous_ProfilePath);
-			previousProfile.delete();
+	      if (siteUser.getProfileName() != defaultProfileName) {
 
-			UUID uuid = UUID.randomUUID();
-			String profileName = uuid + "_" + profile.getOriginalFilename();
-			File saveProfile = new File(profilePath, profileName);
-			try {
-				profile.transferTo(saveProfile);
-			} catch (IllegalStateException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			user.setProfileName(profileName);
-			user.setProfilePath("/profiles/" + profileName);
-			userRepository.save(user);
-		}
-		return "mypage/modifyProfile";
-	}
+	         String profilePath = "D:\\kim\\boot\\profiles";
+	         String previous_ProfilePath = profilePath + siteUser.getProfileName();
+	         File previousProfile = new File(previous_ProfilePath);
 
-	@ResponseBody
-	@PostMapping("/delete-profile-pic")
-	public String deleteProfilePic() {
+	         log.info(previous_ProfilePath);
 
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		String username = authentication.getName();
+	         previousProfile.delete();
 
-		Optional<SiteUser> optionalUser = userRepository.findByUsername(username);
-
-		if (optionalUser.isPresent()) {
-			log.info("프로필 삭제");
-			SiteUser user = optionalUser.get();
-
-			String defaultProfilePath = "/image/기본 프로필.jfif";
-			String defaultProfileName = "기본 프로필.jfif";
-
-			if (user.getProfileName() != defaultProfileName) {
-
-				String profilePath = "D:\\kim\\boot\\profiles";
-				String previous_ProfilePath = profilePath + user.getProfileName();
-				File previousProfile = new File(previous_ProfilePath);
-
-				log.info(previous_ProfilePath);
-
-				previousProfile.delete();
-
-				user.setProfileName(defaultProfileName);
-				user.setProfilePath(defaultProfilePath);
-				userRepository.save(user);
-			} else {
-				return "mypage/modifyProfile";
-			}
-		}
-		return "mypage/modifyProfile";
-	}
+	         siteUser.setProfileName(defaultProfileName);
+	         siteUser.setProfilePath(defaultProfilePath);
+	         userRepository.save(siteUser);
+	      } else {
+	         return "mypage/modifyProfile";
+	      }
+	      
+	      return "mypage/modifyProfile";
+	   }
 }

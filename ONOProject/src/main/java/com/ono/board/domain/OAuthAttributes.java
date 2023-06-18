@@ -18,17 +18,17 @@ public class OAuthAttributes {
 	private String email;
 	private String nickname;
 	private String picture;
-	
-	private String authVendor;
+	private String gender;
 	
 	@Builder
-	public OAuthAttributes(Map<String, Object> attributes, String nameAttributeKey, String name, String email, String picture, String nickname) {
+	public OAuthAttributes(Map<String, Object> attributes, String nameAttributeKey, String name, String email, String picture, String nickname, String gender) {
 		this.attributes = attributes;
 		this.nameAttributeKey = nameAttributeKey;
 		this.name = name;
 		this.email = email;
 		this.nickname = nickname;
 		this.picture = picture;
+		this.gender = gender;
 	}
 	
 	public static OAuthAttributes of(String registrationId, String userNameAttributeName, Map<String, Object> attributes) {
@@ -41,7 +41,6 @@ public class OAuthAttributes {
 //			result = ofKakao("id", attributes);
 		}
 		log.info("registrationId : " + registrationId);
-		result.setAuthVendor(registrationId);
 		return result;
 	}
 	
@@ -54,6 +53,7 @@ public class OAuthAttributes {
 				.email((String) response.get("email"))
 				.picture((String) response.get("profile_image"))
 				.nickname((String) response.get("nickname"))
+				.gender((String) response.get("gender"))
 				.attributes(response)
 				.nameAttributeKey(userNameAttributeName)
 				.build();
@@ -90,6 +90,7 @@ public class OAuthAttributes {
 				.email(email)
 				.profilePath(picture)
 				.nickname(nickname)
+				.gender(gender)
 				.role(UserRole.USER)
 				.build();
 	}

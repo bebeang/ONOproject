@@ -127,4 +127,17 @@ public class UserService {
     	UsernamePasswordAuthenticationToken auth = (UsernamePasswordAuthenticationToken) principal;
     	return auth.getName();
     }
+    
+    public SiteUser modify_naver(String email, String nickname, String gender, String zip, String address1, String address2) {
+        Optional<SiteUser> optionalUser = userRepository.findByEmail(email);
+        SiteUser user = optionalUser.get();
+         user.setEmail(email);
+         user.setNickname(nickname);
+         user.setGender(gender);
+         user.setZip(zip);
+         user.setAddress1(address1);
+         user.setAddress2(address2);
+         this.userRepository.save(user);
+         return user;
+     }
 }

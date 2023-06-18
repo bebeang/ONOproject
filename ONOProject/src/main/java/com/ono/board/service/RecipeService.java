@@ -150,13 +150,13 @@ public class RecipeService {
 	}
 	
 	// 페이징 구현 기능(검색 기능 추가)
-	public Page<Recipe> getList(int page, String kw) {
-		List<Sort.Order> sorts = new ArrayList<>();
-		sorts.add(Sort.Order.desc("createDate"));
-		Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
-		Specification<Recipe> spec = search(kw);
-		return this.recipeRepository.findAll(spec, pageable);
-	}
+	   public Page<Recipe> getList(int page, String kw) {
+	      List<Sort.Order> sorts = new ArrayList<>();
+	      sorts.add(Sort.Order.desc("createDate"));
+	      Pageable pageable = PageRequest.of(page, 6, Sort.by(sorts));
+	      Specification<Recipe> spec = search(kw);
+	      return this.recipeRepository.findAll(spec, pageable);
+	   }
 
 	// 최근 게시물
 	public Page<Recipe> getRecentlyList(int page, String kw) {

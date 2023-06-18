@@ -233,26 +233,43 @@ public class RecipeController {
 	
 	// 지도 주소 호출
 	@GetMapping("/presentAddress")
-	@ResponseBody
-	public String presentAddress() {
-		log.info("presentAddress IN");
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		String username = authentication.getName();
+	   @ResponseBody
+	   public String presentAddress(Principal principal) {
+	      if (principal instanceof UsernamePasswordAuthenticationToken) {
+	         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	         String username = authentication.getName();
+	         Optional<SiteUser> optionalUser = userRepository.findByUsername(username);
 
-		Optional<SiteUser> optionalUser = userRepository.findByUsername(username);
+	         if (optionalUser.isPresent()) {
+	            SiteUser user = optionalUser.get();
+	            String encodedAddress = null;
+	            try {
+	               encodedAddress = URLEncoder.encode(user.getAddress1(), "UTF-8");
+	            } catch (UnsupportedEncodingException e) {
+	               e.printStackTrace();
+	               return null;
+	            }
+	            return encodedAddress;
+	         } else {
+	            return null;
+	         }
+	      } else if (principal instanceof OAuth2AuthenticationToken) {
+	         String email = userService.getEmailFromPrincipal(principal);
+	         SiteUser siteUser = userService.getUserByEmail(email);
 
-		if (optionalUser.isPresent()) {
-			SiteUser user = optionalUser.get();
-			String encodedAddress = null;
-			try {
-				encodedAddress = URLEncoder.encode(user.getAddress1(), "UTF-8");
-			} catch (UnsupportedEncodingException e) {
-				e.printStackTrace();
-			}
-			log.info(encodedAddress);
-			return encodedAddress;
-		} else {
-			return null;
-		}
-	}
+	         log.info("principal email: " + email);
+	         String encodedAddress = null;
+
+	         try {
+	            encodedAddress = URLEncoder.encode(siteUser.getAddress1(), "UTF-8");
+	            return encodedAddress;
+	         } catch (UnsupportedEncodingException e) {
+	            e.printStackTrace();
+	            return null;
+	         }
+	      } else {
+	         return null;
+	      }
+	      
+	   }
 }

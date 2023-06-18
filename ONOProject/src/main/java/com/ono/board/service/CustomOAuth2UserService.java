@@ -44,7 +44,6 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 		OAuthAttributes attributes = OAuthAttributes.of(registrationId, userNameAttributeName, oAuth2User.getAttributes());
 		
 		SiteUser siteUser = saveOrUpdate(attributes);
-		siteUser.setAuthVendor(attributes.getAuthVendor());
 		
 		httpSession.setAttribute("user", new SessionUser(siteUser));
 		
@@ -56,7 +55,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 	
 	private SiteUser saveOrUpdate(OAuthAttributes attributes) {
         SiteUser siteUser = userRepository.findByEmail(attributes.getEmail())
-                .map(entity -> entity.update(attributes.getName(), attributes.getPicture(), attributes.getNickname()))
+                .map(entity -> entity.update(attributes.getName()))
                 .orElse(attributes.toEntity());
         return userRepository.save(siteUser);
     }
