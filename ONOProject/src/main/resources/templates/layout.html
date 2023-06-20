@@ -33,24 +33,20 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 	<body>
     <!-- 검색 -->
-	<div class="row justify-content-center"
-		style="height: 100px; margin-top: 50px">
+	<div class="row justify-content-center" style="height: 100px; margin-top: 50px">
 		<div class="d-flex align-items-center col-5">
 			<div class="input-group">
-				<input type="text" id="search_kw" class="form-control"
-					th:value="${kw}" placeholder="원하는 재료를 입력하세요.">
+				<input type="text" id="search_kw" class="form-control" th:value="${kw}" placeholder="원하는 재료를 입력하세요.">
 				<button class="btn btn-warning" type="button" id="btn_search">찾기</button>
 			</div>
 		</div>
 		
-		 <!-- 레시피 등록하기 버튼 -->
+	<!-- 레시피 등록하기 버튼 -->
       <!-- 레시피 등록하기 버튼 -->
       <div class="row justify-content-end">
          <div class="gap-2 d-md-block">
-            <a class="btn btn-warning float-end" type="button"
-               sec:authorize="isAnonymous()" th:href="@{/user/login}">레시피 등록하기</a>
-            <a class="btn btn-warning float-end" type="button"   
-               sec:authorize="isAuthenticated()" th:href="@{/recipe/create}">레시피 등록하기</a>
+            <a class="btn btn-warning float-end" type="button" sec:authorize="isAnonymous()" th:href="@{/user/login}">레시피 등록하기</a>
+            <a class="btn btn-warning float-end" type="button" sec:authorize="isAuthenticated()" th:href="@{/recipe/create}">레시피 등록하기</a>
          </div>
       </div>
 	</div>

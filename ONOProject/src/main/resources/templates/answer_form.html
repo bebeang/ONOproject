@@ -7,14 +7,14 @@
         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
         <div th:replace="~{form_errors :: formErrorsFragment}"></div>
         
-    <!-- 내용 수정 -->    
-        <div class="mb-3">
-            <label for="content" class="form-label">내용</label>
-            <textarea th:field="*{content}" class="form-control" rows="10"></textarea>
-        </div>
-        
-    <!-- 저장 버튼 -->    
-        <input type="submit" value="저장하기" class="btn btn-warning my-2">
+	    <!-- 내용 수정 -->    
+	    <div class="mb-3">
+	        <label for="content" class="form-label">내용</label>
+	        <textarea th:field="*{content}" class="form-control" rows="10"></textarea>
+	    </div>
+	        
+	    <!-- 저장 버튼 -->    
+	    <input type="submit" value="저장하기" class="btn btn-warning my-2" />
     </form>
     
 </div>

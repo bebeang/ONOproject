@@ -75,8 +75,7 @@
 								class="text-muted">Ingredients</small></span>
 						</h5>
 						<h6>
-							<th:block
-								th:each="ingredient, index : ${#strings.arraySplit(recipe.ingredient, ',')}">
+							<th:block th:each="ingredient, index : ${#strings.arraySplit(recipe.ingredient, ',')}">
 								<span th:text="${ingredient}"
 									style="margin-left: 30px; text-align: left; display: inline-block; width: 30%;"></span>
 								<span th:text="' '"></span>
@@ -84,7 +83,8 @@
 									th:text="${#strings.arraySplit(recipe.capacity, ',')[__${index.index}__]}"
 									style="text-align: right; display: inline-block; width: 30%;"></span>
 								<br />
-						</h6> </th:block>
+							</th:block>
+						</h6> 
 					</td>
 				</tr>
 			</table>

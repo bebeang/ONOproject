@@ -1,5 +1,4 @@
-<html layout:decorate="~{layout}"
-xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html layout:decorate="~{layout}" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <div layout:fragment="content" class="container my-3">
 
 	<!-- Error message -->
@@ -27,10 +26,8 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 						<!-- 아이디 -->
 						<tr>
 							<td><label for="username" class="form-label">아이디</label></td>
-							<td><input type="text" name="username" id="username"
-								class="form-control text-center" style="width: 500px;"
-								placeholder="아이디를 입력하세요." title="아이디(영문으로 시작하는 6자리 이상)를 입력하십시오."
-								pattern="[a-zA-Z]{1}\w{5,19}"></td>
+							<td><input type="text" name="username" id="username" class="form-control text-center" style="width: 500px;"
+								placeholder="아이디를 입력하세요." title="아이디(영문으로 시작하는 6자리 이상)를 입력하십시오." pattern="[a-zA-Z]{1}\w{5,19}"></td>
 							<td></td>
 						</tr>
 
@@ -47,9 +44,8 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 						<!-- 회원가입 버튼 -->
 						<tr>
 							<td></td>
-							<td><button type="submit" class="btn btn-warning"
-									style="width: 245px; height: 60px;">로그인</button>
-						    <a href="/oauth2/authorization/naver" role="button">
+							<td><button type="submit" class="btn btn-warning" style="width: 245px; height: 60px;">로그인</button>
+						    	<a href="/oauth2/authorization/naver" role="button">
 								<img src="/image/naverButton.png" alt="Naver Button" style="width: 245px; height: 60px;">
 							</a></td>			
 						</tr>
@@ -62,7 +58,7 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 			<a href="/oauth2/authorization/kakao" 
 				class="btn btn-secondary active" role="button">Kakao Login</a> -->
 		</div>
+	  </div>
 	</form>
-	
 </div>
 </html>

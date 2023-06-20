@@ -104,7 +104,8 @@ public class UserController {
 			return ResponseEntity.ok().body(true); // 사용 가능한 경우 true를 반환
 		}
 	}
-
+	
+	// 네이버 로그인 확인
 	@GetMapping("/login/oauth2/authorization/naver")
 	public String naverLogin() {
 		return "index";

@@ -72,7 +72,8 @@ public class RecipeService {
 			}
 		};
 	}
-
+	
+	// 모든 레시피 검색
 	public List<Recipe> getList() {
 		return this.recipeRepository.findAll();
 	}

@@ -40,7 +40,8 @@ public class MypageController {
 	private final UserService userService;
 	private final UserRepository userRepository;
 	private final PasswordEncoder passwordEncoder;
-
+	
+	// 마이페이지 호출
 	@GetMapping("/mypage/modifyProfile")
 	public String modify(Model model, Principal principal) { // , @PathVariable("userId") String userId
 
@@ -77,7 +78,8 @@ public class MypageController {
 		}
 		return "mypage";
 	}
-
+	
+		// 마이페이지 수정
 	   @PostMapping("/mypage")
 	   public String modify(@Valid @ModelAttribute("userModifyForm") UserModifyFormDto userModifyForm,
 	         BindingResult bindingResult, Model model, Principal principal) {
@@ -160,7 +162,8 @@ public class MypageController {
 	      // 개인정보수정 완료 시 index페이지로 돌아가기
 	      return "redirect:/index";
 	   }
-
+	   
+	   // 마이페이지 프로필 사진 수정
 	   @ResponseBody
 	   @PostMapping("/update-profile-pic")
 	   public String updateProfilePic(@RequestParam("profilePicPreview") MultipartFile profile, Principal principal) {
@@ -208,6 +211,7 @@ public class MypageController {
 	      return "mypage/modifyProfile";
 	   }
 	   
+	   // 마이페이지 프로필 사진 삭제
 	   @ResponseBody
 	   @PostMapping("/delete-profile-pic")
 	   public String deleteProfilePic(Principal principal) {

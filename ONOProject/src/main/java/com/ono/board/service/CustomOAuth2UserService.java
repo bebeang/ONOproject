@@ -29,7 +29,8 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Slf4j
 public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User>{
-
+	
+	//OAuth2User 확인
 	private final UserRepository userRepository;
 	private final HttpSession httpSession;
 	

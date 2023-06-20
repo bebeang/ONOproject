@@ -30,7 +30,8 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-
+    
+    // 회원가입
     public SiteUser create(String username, String password, String email,
     		String name, String nickname, MultipartFile profile, 
     		String gender, String mobile, String zip,
